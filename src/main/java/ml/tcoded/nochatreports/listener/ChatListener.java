@@ -28,7 +28,7 @@ public class ChatListener implements Listener {
         String formattedMsg = String.format(noReportChatEvent.getFormat(), noReportChatEvent.getPlayer().getName(), noReportChatEvent.getMessage());
         BaseComponent msgComponent = new TextComponent(formattedMsg);
 
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : noReportChatEvent.getRecipients()) {
             player.spigot().sendMessage(ChatMessageType.CHAT, uuid, msgComponent);
         }
     }

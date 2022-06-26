@@ -6,7 +6,7 @@
 
     <groupId>ml.tcoded</groupId>
     <artifactId>NoChatReports-Spigot</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
 
     <name>NoChatReports-Spigot</name>
@@ -71,6 +71,13 @@
             <artifactId>spigot-api</artifactId>
             <version>1.19-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>1.19-R0.1-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/spigot-1.19-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
