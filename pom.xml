@@ -9,7 +9,7 @@
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>NoChatReports Spigot</name>
+    <name>NoChatReports-Spigot</name>
 
     <description>Prevent message signatures from being sent to clients</description>
     <properties>
