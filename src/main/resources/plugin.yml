@@ -5,3 +5,4 @@ api-version: 1.19
 authors: [ TechnicallyCoded ]
 description: "Prevent message signatures from being sent to clients"
 website: "https://gcnt.net"
+softdepend: [EssentialsX, EssentialsXDiscord, LPC]
