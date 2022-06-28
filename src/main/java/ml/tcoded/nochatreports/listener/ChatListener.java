@@ -6,6 +6,7 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -32,7 +33,7 @@ public class ChatListener implements Listener {
         BaseComponent msgComponent = new TextComponent(formattedMsg);
 
         // Log chat to console since cancelling the event causes the chat to not be logged
-        Bukkit.getLogger().info(formattedMsg);
+        Bukkit.getLogger().info(ChatColor.stripColor(formattedMsg));
 
         // Send the message to recipients
         for (Player player : noReportChatEvent.getRecipients()) {
