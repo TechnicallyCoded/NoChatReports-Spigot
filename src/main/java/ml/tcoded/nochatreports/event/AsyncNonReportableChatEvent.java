@@ -20,8 +20,8 @@ public class AsyncNonReportableChatEvent extends Event implements Cancellable {
     private boolean cancelled;
 
 
-    public AsyncNonReportableChatEvent(Player player, String format, String message, Set<Player> recipients) {
-        super(true);
+    public AsyncNonReportableChatEvent(boolean async, Player player, String format, String message, Set<Player> recipients) {
+        super(async);
         this.handlerList = new HandlerList();
 
         this.player = player;

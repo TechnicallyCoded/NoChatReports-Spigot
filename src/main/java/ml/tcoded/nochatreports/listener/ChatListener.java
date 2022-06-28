@@ -22,7 +22,7 @@ public class ChatListener implements Listener {
         event.setCancelled(true);
 
         // Fire event with information provided to the NoChatReports plugin
-        AsyncNonReportableChatEvent noReportChatEvent = new AsyncNonReportableChatEvent(event.getPlayer(), event.getFormat(), event.getMessage(), event.getRecipients());
+        AsyncNonReportableChatEvent noReportChatEvent = new AsyncNonReportableChatEvent(event.isAsynchronous(), event.getPlayer(), event.getFormat(), event.getMessage(), event.getRecipients());
         Bukkit.getPluginManager().callEvent(noReportChatEvent);
         if (noReportChatEvent.isCancelled()) return;
 
@@ -40,7 +40,7 @@ public class ChatListener implements Listener {
         }
 
         // Fire event with final message that was sent to the players
-        AsyncPostNonReportableChatEvent postNoReportChatEvent = new AsyncPostNonReportableChatEvent(noReportChatEvent.getPlayer(), formattedMsg, noReportChatEvent.getRecipients());
+        AsyncPostNonReportableChatEvent postNoReportChatEvent = new AsyncPostNonReportableChatEvent(event.isAsynchronous(), noReportChatEvent.getPlayer(), formattedMsg, noReportChatEvent.getRecipients());
         Bukkit.getPluginManager().callEvent(postNoReportChatEvent);
     }
 

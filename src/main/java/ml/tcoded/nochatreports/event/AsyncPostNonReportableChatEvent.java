@@ -16,8 +16,8 @@ public class AsyncPostNonReportableChatEvent extends Event {
     private Set<Player> recipients;
 
 
-    public AsyncPostNonReportableChatEvent(Player player, String message, Set<Player> recipients) {
-        super(true);
+    public AsyncPostNonReportableChatEvent(boolean async, Player player, String message, Set<Player> recipients) {
+        super(async);
         this.handlerList = new HandlerList();
 
         this.player = player;
