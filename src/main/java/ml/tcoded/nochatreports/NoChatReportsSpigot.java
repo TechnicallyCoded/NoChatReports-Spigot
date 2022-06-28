@@ -1,11 +1,10 @@
 package ml.tcoded.nochatreports;
 
 import ml.tcoded.nochatreports.hook.AbstractHook;
-import ml.tcoded.nochatreports.hook.EssentialsXDiscord;
+import ml.tcoded.nochatreports.hook.EssentialsXDiscordHook;
 import ml.tcoded.nochatreports.listener.ChatListener;
 import ml.tcoded.nochatreports.listener.WhisperListener;
 import ml.tcoded.nochatreports.util.UpdateUtil;
-import net.minecraft.server.rcon.RemoteControlCommandListener;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -30,7 +29,9 @@ public final class NoChatReportsSpigot extends JavaPlugin {
     }
 
     private void initHooks() {
-        this.hooks.put(EssentialsXDiscord.class, new EssentialsXDiscord(this));
+        if (this.getServer().getPluginManager().getPlugin("EssentialsXDiscord") != null) {
+            this.hooks.put(EssentialsXDiscordHook.class, new EssentialsXDiscordHook(this));
+        }
     }
 
     @Override

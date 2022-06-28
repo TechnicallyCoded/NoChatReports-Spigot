@@ -1,23 +1,21 @@
 package ml.tcoded.nochatreports.hook;
 
 import ml.tcoded.nochatreports.NoChatReportsSpigot;
-import ml.tcoded.nochatreports.event.AsyncNonReportableChatEvent;
 import ml.tcoded.nochatreports.event.AsyncPostNonReportableChatEvent;
 import net.essentialsx.api.v2.services.discord.DiscordService;
 import net.essentialsx.api.v2.services.discord.MessageType;
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
-public class EssentialsXDiscord extends AbstractHook implements Listener {
+public class EssentialsXDiscordHook extends AbstractHook implements Listener {
 
     private final NoChatReportsSpigot plugin;
     private final MessageType channel = MessageType.DefaultTypes.CHAT;
 
     private DiscordService api;
 
-    public EssentialsXDiscord(NoChatReportsSpigot pluginIn) {
+    public EssentialsXDiscordHook(NoChatReportsSpigot pluginIn) {
         this.plugin = pluginIn;
     }
 
