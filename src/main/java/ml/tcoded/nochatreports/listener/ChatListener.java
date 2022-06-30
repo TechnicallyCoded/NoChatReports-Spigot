@@ -20,6 +20,10 @@ public class ChatListener implements Listener {
     @SuppressWarnings("DefaultAnnotationParam")
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
     public void onChat(AsyncPlayerChatEvent event) {
+        // Don't process chat if cancelled
+        if (event.isCancelled()) return;
+
+        // Make sure chat event doesn't progress any further
         event.setCancelled(true);
 
         // Fire event with information provided to the NoChatReports plugin
