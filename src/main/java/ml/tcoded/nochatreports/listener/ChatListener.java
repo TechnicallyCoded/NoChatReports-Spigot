@@ -23,17 +23,22 @@ public class ChatListener implements Listener {
         event.setCancelled(true);
 
         // Fire event with information provided to the NoChatReports plugin
-        AsyncNonReportableChatEvent noReportChatEvent = new AsyncNonReportableChatEvent(event.isAsynchronous(), event.getPlayer(), event.getFormat(), event.getMessage(), event.getRecipients());
+        AsyncNonReportableChatEvent noReportChatEvent = new AsyncNonReportableChatEvent(
+                event.isAsynchronous(),
+                event.getPlayer(),
+                event.getFormat(),
+                event.getMessage(),
+                event.getRecipients());
         Bukkit.getPluginManager().callEvent(noReportChatEvent);
         if (noReportChatEvent.isCancelled()) return;
 
         // Parse result
         UUID uuid = noReportChatEvent.getPlayer().getUniqueId();
-        String formattedMsg = String.format(noReportChatEvent.getFormat(), noReportChatEvent.getPlayer().getName(), noReportChatEvent.getMessage());
+        String formattedMsg = String.format(noReportChatEvent.getFormat(), noReportChatEvent.getPlayer().getDisplayName(), noReportChatEvent.getMessage());
         BaseComponent msgComponent = new TextComponent(formattedMsg);
 
         // Log chat to console since cancelling the event causes the chat to not be logged
-        Bukkit.getLogger().info(ChatColor.stripColor(formattedMsg));
+        Bukkit.getConsoleSender().sendMessage(formattedMsg);
 
         // Send the message to recipients
         for (Player player : noReportChatEvent.getRecipients()) {
@@ -41,7 +46,12 @@ public class ChatListener implements Listener {
         }
 
         // Fire event with final message that was sent to the players
-        AsyncPostNonReportableChatEvent postNoReportChatEvent = new AsyncPostNonReportableChatEvent(event.isAsynchronous(), noReportChatEvent.getPlayer(), formattedMsg, noReportChatEvent.getRecipients());
+        AsyncPostNonReportableChatEvent postNoReportChatEvent = new AsyncPostNonReportableChatEvent(
+                event.isAsynchronous(),
+                noReportChatEvent.getPlayer(),
+                noReportChatEvent.getMessage(),
+                formattedMsg,
+                noReportChatEvent.getRecipients());
         Bukkit.getPluginManager().callEvent(postNoReportChatEvent);
     }
 

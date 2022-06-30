@@ -10,18 +10,19 @@ import java.util.Set;
 
 public class AsyncPostNonReportableChatEvent extends Event {
 
-    private final HandlerList handlerList;
+    private static final HandlerList handlerList = new HandlerList();
     private Player player;
     private String message;
+    private String formattedMessage;
     private Set<Player> recipients;
 
 
-    public AsyncPostNonReportableChatEvent(boolean async, Player player, String message, Set<Player> recipients) {
+    public AsyncPostNonReportableChatEvent(boolean async, Player player, String message, String formattedMessage, Set<Player> recipients) {
         super(async);
-        this.handlerList = new HandlerList();
 
         this.player = player;
         this.message = message;
+        this.formattedMessage = formattedMessage;
         this.recipients = recipients;
     }
 
@@ -32,12 +33,21 @@ public class AsyncPostNonReportableChatEvent extends Event {
     }
 
     @SuppressWarnings("unused")
+    public static HandlerList getHandlerList() {
+        return handlerList;
+    }
+
+    @SuppressWarnings("unused")
     public Player getPlayer() {
         return player;
     }
 
     public String getMessage() {
         return message;
+    }
+
+    public String getFormattedMessage() {
+        return formattedMessage;
     }
 
     @SuppressWarnings("unused")
@@ -53,6 +63,11 @@ public class AsyncPostNonReportableChatEvent extends Event {
     @SuppressWarnings("unused")
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    @SuppressWarnings("unused")
+    public void setFormattedMessage(String formattedMessage) {
+        this.formattedMessage = formattedMessage;
     }
 
     @SuppressWarnings("unused")

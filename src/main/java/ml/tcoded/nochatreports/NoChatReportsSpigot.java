@@ -7,6 +7,7 @@ import ml.tcoded.nochatreports.listener.WhisperListener;
 import ml.tcoded.nochatreports.util.UpdateUtil;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.event.HandlerList;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -29,15 +30,21 @@ public final class NoChatReportsSpigot extends JavaPlugin {
     }
 
     private void initHooks() {
-        if (this.getServer().getPluginManager().getPlugin("EssentialsXDiscord") != null) {
+        this.getLogger().info("Loading plugin hooks...");
+        if (this.getServer().getPluginManager().getPlugin("EssentialsDiscord") != null) {
             this.hooks.put(EssentialsXDiscordHook.class, new EssentialsXDiscordHook(this));
         }
+
+        this.hooks.values().forEach(AbstractHook::init);
+        this.getLogger().info("Loaded " + this.hooks.size() + " plugin hooks!");
     }
 
     @Override
     public void onDisable() {
+        this.getLogger().info("Unloading plugin hooks...");
         this.hooks.values().forEach(AbstractHook::disable);
         this.hooks.clear();
+        this.getLogger().info("Unloaded all plugin hooks!");
         HandlerList.unregisterAll(this);
     }
 

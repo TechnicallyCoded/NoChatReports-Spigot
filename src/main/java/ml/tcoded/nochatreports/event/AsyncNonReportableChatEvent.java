@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class AsyncNonReportableChatEvent extends Event implements Cancellable {
 
-    private final HandlerList handlerList;
+    private static final HandlerList handlerList = new HandlerList();
     private Player player;
 
     private String format;
@@ -22,7 +22,6 @@ public class AsyncNonReportableChatEvent extends Event implements Cancellable {
 
     public AsyncNonReportableChatEvent(boolean async, Player player, String format, String message, Set<Player> recipients) {
         super(async);
-        this.handlerList = new HandlerList();
 
         this.player = player;
         this.format = format;
@@ -35,6 +34,11 @@ public class AsyncNonReportableChatEvent extends Event implements Cancellable {
     @NotNull
     @Override
     public HandlerList getHandlers() {
+        return handlerList;
+    }
+
+    @SuppressWarnings("unused")
+    public static HandlerList getHandlerList() {
         return handlerList;
     }
 
