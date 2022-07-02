@@ -1,13 +1,15 @@
 package ml.tcoded.nochatreports;
 
 import ml.tcoded.nochatreports.hook.AbstractHook;
+import ml.tcoded.nochatreports.hook.DiscordIntegrationHook;
+import ml.tcoded.nochatreports.hook.DiscordSRVHook;
 import ml.tcoded.nochatreports.hook.EssentialsXDiscordHook;
 import ml.tcoded.nochatreports.listener.ChatListener;
 import ml.tcoded.nochatreports.listener.WhisperListener;
 import ml.tcoded.nochatreports.util.UpdateUtil;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.event.HandlerList;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -31,8 +33,22 @@ public final class NoChatReportsSpigot extends JavaPlugin {
 
     private void initHooks() {
         this.getLogger().info("Loading plugin hooks...");
-        if (this.getServer().getPluginManager().getPlugin("EssentialsDiscord") != null) {
+
+        PluginManager pluginManager = this.getServer().getPluginManager();
+
+        // EssentialsDiscord
+        if (pluginManager.getPlugin("EssentialsDiscord") != null) {
             this.hooks.put(EssentialsXDiscordHook.class, new EssentialsXDiscordHook(this));
+        }
+
+        // DiscordIntegration
+        if (pluginManager.getPlugin("DiscordIntegration") != null) {
+            this.hooks.put(DiscordIntegrationHook.class, new DiscordIntegrationHook(this));
+        }
+
+        // DiscordSRV
+        if (pluginManager.getPlugin("DiscordSRV") != null) {
+            this.hooks.put(DiscordSRVHook.class, new DiscordSRVHook(this));
         }
 
         this.hooks.values().forEach(AbstractHook::init);
