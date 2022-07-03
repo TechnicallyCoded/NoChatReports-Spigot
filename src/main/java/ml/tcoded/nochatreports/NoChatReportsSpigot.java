@@ -38,17 +38,29 @@ public final class NoChatReportsSpigot extends JavaPlugin {
 
         // EssentialsDiscord
         if (pluginManager.getPlugin("EssentialsDiscord") != null) {
-            this.hooks.put(EssentialsXDiscordHook.class, new EssentialsXDiscordHook(this));
+            try {
+                this.hooks.put(EssentialsXDiscordHook.class, new EssentialsXDiscordHook(this));
+            } catch(Exception ex) {
+                this.getLogger().warning("Failed to load EssentialsXDiscordHook! Please contact me on discord if this is not expected. The discord server is linked in the plugin description on spigotmc.");
+            }
         }
 
         // DiscordIntegration
         if (pluginManager.getPlugin("DiscordIntegration") != null) {
-            this.hooks.put(DiscordIntegrationHook.class, new DiscordIntegrationHook(this));
+            try {
+                this.hooks.put(DiscordIntegrationHook.class, new DiscordIntegrationHook(this));
+            } catch(Exception ex) {
+                this.getLogger().warning("Failed to load DiscordIntegrationHook! Please contact me on discord if this is not expected. The discord server is linked in the plugin description on spigotmc.");
+            }
         }
 
         // DiscordSRV
         if (pluginManager.getPlugin("DiscordSRV") != null) {
-            this.hooks.put(DiscordSRVHook.class, new DiscordSRVHook(this));
+            try {
+                this.hooks.put(DiscordSRVHook.class, new DiscordSRVHook(this));
+            } catch(Exception ex) {
+                this.getLogger().warning("Failed to load DiscordSRVHook! Please contact me on discord if this is not expected. The discord server is linked in the plugin description on spigotmc.");
+            }
         }
 
         this.hooks.values().forEach(AbstractHook::init);
