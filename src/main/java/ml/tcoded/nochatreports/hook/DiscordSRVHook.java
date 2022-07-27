@@ -3,7 +3,6 @@ package ml.tcoded.nochatreports.hook;
 import github.scarsz.discordsrv.DiscordSRV;
 import ml.tcoded.nochatreports.NoChatReportsSpigot;
 import ml.tcoded.nochatreports.event.AsyncPostNonReportableChatEvent;
-import net.essentialsx.api.v2.services.discord.MessageType;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -11,8 +10,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
 public class DiscordSRVHook extends AbstractHook implements Listener {
-
-    private final MessageType channel = MessageType.DefaultTypes.CHAT;
 
     private DiscordSRV api;
 
