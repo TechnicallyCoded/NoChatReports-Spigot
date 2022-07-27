@@ -127,9 +127,18 @@
         <dependency>
             <groupId>com.dominikkorsa</groupId>
             <artifactId>DiscordIntegration</artifactId>
-            <version>2.4.1</version>
-            <scope>provided</scope>
+            <version>3.2.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/DiscordIntegration-3.2.0.jar</systemPath>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-core
+        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-coroutines-core</artifactId>
+            <version>1.6.3</version>
+            <type>pom</type>
+            <scope>compile</scope>
+        </dependency>-->
         <dependency>
             <groupId>com.github.DiscordSRV</groupId>
             <artifactId>DiscordSRV</artifactId>

@@ -3,7 +3,6 @@ package ml.tcoded.nochatreports.hook;
 import com.dominikkorsa.discordintegration.Client;
 import com.dominikkorsa.discordintegration.DiscordIntegration;
 import discord4j.core.spec.WebhookExecuteSpec;
-import kotlin.Unit;
 import kotlin.coroutines.Continuation;
 import kotlin.coroutines.CoroutineContext;
 import kotlin.coroutines.EmptyCoroutineContext;
@@ -46,16 +45,15 @@ public class DiscordIntegrationHook extends AbstractHook implements Listener {
         String discordMsg = api.getDiscordFormatter().formatMessageContent(event.getMessage());
         Client client = api.getClient();
 
-        Continuation<Unit> postWebhookContinuation = new ConsumerContinuation<>(o -> {
+        WebhookExecuteSpec.Builder playerWebhookBuilder = (WebhookExecuteSpec.Builder)
+                client.getPlayerWebhookBuilder(event.getPlayer(), new ConsumerContinuation<>(o -> {}));
 
-        });
+        if (playerWebhookBuilder == null) return;
 
-        Continuation<WebhookExecuteSpec.Builder> postPlayerContinuation = new ConsumerContinuation<>(o -> {
-            o.content(discordMsg);
-            client.sendWebhook(o.build(), postWebhookContinuation);
-        });
+        playerWebhookBuilder.content(discordMsg);
+        WebhookExecuteSpec built = playerWebhookBuilder.build();
 
-        client.getPlayerWebhookBuilder(event.getPlayer(), postPlayerContinuation);
+        client.sendWebhook(built, new ConsumerContinuation<>(o -> {}));
     }
 
     private static class ConsumerContinuation<T> implements Continuation<T> {
