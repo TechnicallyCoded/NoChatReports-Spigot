@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>ml.tcoded</groupId>
+    <groupId>we.hate</groupId>
     <artifactId>NoChatReports-Spigot</artifactId>
-    <version>1.0.5</version>
+    <version>1.1.0</version>
     <packaging>jar</packaging>
 
     <name>NoChatReports-Spigot</name>
@@ -32,7 +32,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>3.5.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -44,6 +44,23 @@
                         </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <relocations>
+                        <relocation>
+                            <pattern>com.github.retrooper.packetevents</pattern>
+                            <shadedPattern>${project.groupId}.chatreports.lib.packetevents.api</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>io.github.retrooper.packetevents</pattern>
+                            <shadedPattern>${project.groupId}.chatreports.lib.packetevents.impl</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>net.kyori</pattern>
+                            <shadedPattern>${project.groupId}.chatreports.lib.packetevents.kyori</shadedPattern>
+                        </relocation>
+                    </relocations>
+                    <minimizeJar>true</minimizeJar>
+                </configuration>
             </plugin>
         </plugins>
         <resources>
@@ -64,10 +81,6 @@
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
         <repository>
-            <id>essentialsx</id>
-            <url>https://repo.essentialsx.net/releases/</url>
-        </repository>
-        <repository>
             <id>gcnt-other</id>
             <url>https://nexuslite.gcnt.net/repos/other</url>
         </repository>
@@ -75,21 +88,36 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <repository>
+            <id>codemc-snapshots</id>
+            <url>https://repo.codemc.io/repository/maven-snapshots/</url>
+        </repository>
     </repositories>
 
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.19-R0.1-SNAPSHOT</version>
+            <version>1.20.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.19-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/spigot-1.19-R0.1-SNAPSHOT.jar</systemPath>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.jetbrains</groupId>
+                    <artifactId>annotations</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.code.gson</groupId>
+                    <artifactId>gson</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.yaml</groupId>
+                    <artifactId>snakeyaml</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
@@ -98,52 +126,20 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>net.essentialsx</groupId>
-            <artifactId>EssentialsXDiscord</artifactId>
-            <version>2.19.4</version>
-            <scope>provided</scope>
+            <groupId>com.github.retrooper.packetevents</groupId>
+            <artifactId>spigot</artifactId>
+            <version>2.0.0-SNAPSHOT</version>
+            <scope>compile</scope>
             <exclusions>
                 <exclusion>
-                    <groupId>net.dv8tion</groupId>
-                    <artifactId>JDA</artifactId>
+                    <groupId>org.jetbrains</groupId>
+                    <artifactId>annotations</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>org.bstats</groupId>
-                    <artifactId>bstats</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.bstats</groupId>
-                    <artifactId>bstats-bukkit</artifactId>
+                    <groupId>com.google.code.gson</groupId>
+                    <artifactId>gson</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <!-- HOOKS -->
-        <dependency>
-            <groupId>net.essentialsx</groupId>
-            <artifactId>EssentialsX</artifactId>
-            <version>2.19.4</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.dominikkorsa</groupId>
-            <artifactId>DiscordIntegration</artifactId>
-            <version>3.2.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/DiscordIntegration-3.2.0.jar</systemPath>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-core
-        <dependency>
-            <groupId>org.jetbrains.kotlinx</groupId>
-            <artifactId>kotlinx-coroutines-core</artifactId>
-            <version>1.6.3</version>
-            <type>pom</type>
-            <scope>compile</scope>
-        </dependency>-->
-        <dependency>
-            <groupId>com.github.DiscordSRV</groupId>
-            <artifactId>DiscordSRV</artifactId>
-            <version>v1.25.1</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

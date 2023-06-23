@@ -1,4 +1,4 @@
-package ml.tcoded.nochatreports.util;
+package we.hate.chatreports.util;
 
 import org.bukkit.plugin.java.JavaPlugin;
 

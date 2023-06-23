@@ -1,8 +1,14 @@
 name: NoChatReports
 version: '${project.version}'
-main: ml.tcoded.nochatreports.NoChatReportsSpigot
+main: we.hate.chatreports.NoChatReports
 api-version: 1.19
 authors: [ TechnicallyCoded ]
 description: "Prevent message signatures from being sent to clients"
-website: "https://gcnt.net"
-softdepend: [Essentials, EssentialsDiscord, LPC, DiscordIntegration, DiscordSRV]
+website: "https://tcoded.com"
+softdepend:
+  - ProtocolLib
+  - ProtocolSupport
+  - ViaVersion
+  - ViaBackwards
+  - ViaRewind
+  - Geyser-Spigot
