@@ -2,6 +2,7 @@ name: NoChatReports
 version: '${project.version}'
 main: ml.tcoded.nochatreports.NoChatReportsSpigot
 api-version: 1.19
+folia-supported: true
 authors: [ TechnicallyCoded ]
 description: "Prevent message signatures from being sent to clients"
 website: "https://gcnt.net"

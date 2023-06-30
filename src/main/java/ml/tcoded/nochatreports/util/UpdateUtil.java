@@ -1,14 +1,13 @@
 package ml.tcoded.nochatreports.util;
 
 import ml.tcoded.nochatreports.NoChatReportsSpigot;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
 
 public class UpdateUtil {
 
     public static void checkUpdate(NoChatReportsSpigot plugin) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+        NoChatReportsSpigot.getScheduler().runTaskAsynchronously(() -> {
             ConsoleCommandSender consoleSender = plugin.getConsoleSender();
             String pluginName = plugin.getDescription().getName();
             String prefix = ChatColor.WHITE + "[" + ChatColor.GREEN + pluginName+ ChatColor.WHITE + "]" + ChatColor.GRAY;

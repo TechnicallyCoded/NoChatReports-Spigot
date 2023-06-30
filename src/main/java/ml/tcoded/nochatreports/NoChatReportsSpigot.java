@@ -12,12 +12,16 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.github.Anon8281.universalScheduler.UniversalScheduler;
+import com.github.Anon8281.universalScheduler.scheduling.schedulers.TaskScheduler;
+
 import java.util.HashMap;
 
 @SuppressWarnings("unused")
 public final class NoChatReportsSpigot extends JavaPlugin {
 
     private final HashMap<Class<? extends AbstractHook>, AbstractHook> hooks;
+    private static TaskScheduler scheduler;
 
     public NoChatReportsSpigot() {
         this.hooks = new HashMap<>();
@@ -28,7 +32,12 @@ public final class NoChatReportsSpigot extends JavaPlugin {
         initHooks();
         this.getServer().getPluginManager().registerEvents(new ChatListener(), this);
         this.getServer().getPluginManager().registerEvents(new WhisperListener(), this);
+        scheduler = UniversalScheduler.getScheduler(this);
         UpdateUtil.checkUpdate(this);
+    }
+
+    public static TaskScheduler getScheduler() {
+        return scheduler;
     }
 
     private void initHooks() {

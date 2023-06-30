@@ -3,7 +3,6 @@ package ml.tcoded.nochatreports.hook;
 import github.scarsz.discordsrv.DiscordSRV;
 import ml.tcoded.nochatreports.NoChatReportsSpigot;
 import ml.tcoded.nochatreports.event.AsyncPostNonReportableChatEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -40,7 +39,7 @@ public class DiscordSRVHook extends AbstractHook implements Listener {
             return;
         }
 
-        Bukkit.getScheduler().runTaskAsynchronously(DiscordSRV.getPlugin(), () ->
+        NoChatReportsSpigot.getScheduler().runTaskAsynchronously(DiscordSRV.getPlugin(), () ->
                 DiscordSRV.getPlugin().processChatMessage(
                         event.getPlayer(),
                         event.getMessage(),
