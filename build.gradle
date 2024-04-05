@@ -1,0 +1,83 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+allprojects {
+    group = 'com.tcoded'
+    version = '2.0.0'
+
+    repositories {
+        mavenCentral()
+        maven {
+            name = "codemc-snapshots"
+            url = "https://repo.codemc.io/repository/maven-releases/"
+        }
+
+        maven {
+            name = "spigotmc-repo"
+            url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
+        }
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+subprojects {
+
+    apply plugin: 'java'
+    apply plugin: 'com.github.johnrengelman.shadow'
+
+    group = rootProject.group + '.nochatreports'
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    jar {
+        manifest {}
+    }
+
+//    shadowJar {
+//        minimize() {
+//            logger.log(LogLevel.ERROR, "Minimizing ${project.name}")
+//            exclude project(':nms')
+//            exclude "META-INF", "META-INF/**"
+//        }
+//    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+}
+
+assemble {
+    dependsOn shadowJar
+}
+
+dependencies {
+    implementation project(":plugin")
+    implementation project(":nms:common")
+//    implementation project(":nms:v1_19_4")
+    implementation project(path: ":nms:v1_19_4", configuration: "reobf")
+    implementation project(path: ":nms:v1_20", configuration: "reobf")
+    implementation project(path: ":nms:v1_20_3", configuration: "reobf")
+    implementation project(path: ":nms:v1_20_4", configuration: "reobf")
+
+    implementation "com.github.retrooper.packetevents:spigot:2.2.1"
+}
+
+jar {
+    archiveClassifier.set("raw")
+}
+
+shadowJar {
+    archiveClassifier.set("")
+
+    relocate 'com.github.retrooper.packetevents', "${project.group}.nochatreports.lib.packetevents.api"
+    relocate 'io.github.retrooper.packetevents', "${project.group}.nochatreports.lib.packetevents.impl"
+    relocate 'net.kyori', "${project.group}.nochatreports.lib.packetevents.kyori"
+
+    relocate 'com.tcoded.lightlibs.updatechecker', "${project.group}.nochatreports.lib.spigotupdatechecker"
+}

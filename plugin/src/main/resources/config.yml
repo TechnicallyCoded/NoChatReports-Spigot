@@ -1,0 +1,5 @@
+hide-scary-popup: true
+strip-client-chat-signatures: true
+
+# Essentials/ViaVersion Settings - We believe in user choice...
+disable-plugin-policing: true

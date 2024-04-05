@@ -1,0 +1,16 @@
+plugins {
+    id 'io.papermc.paperweight.userdev' version '1.5.4'
+}
+
+dependencies {
+    paperweightDevelopmentBundle("io.papermc.paper:dev-bundle:1.20.3-R0.1-SNAPSHOT")
+    compileOnly project(":nms:common")
+}
+
+//assemble {
+//    dependsOn 'reobfJar'
+//}
+
+tasks.named('assemble') {
+    dependsOn 'reobfJar'
+}

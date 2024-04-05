@@ -1,0 +1,4 @@
+dependencies {
+    // https://mvnrepository.com/artifact/io.netty/netty-buffer
+    compileOnly group: 'io.netty', name: 'netty-buffer', version: '4.1.108.Final'
+}

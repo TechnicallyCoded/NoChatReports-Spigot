@@ -1,0 +1,10 @@
+dependencies {
+//    subprojects.each {
+//        implementation project(":nms:${it.getName()}")
+//    }
+//    implementation project(":nms:common")
+}
+
+assemble {
+    dependsOn shadowJar
+}

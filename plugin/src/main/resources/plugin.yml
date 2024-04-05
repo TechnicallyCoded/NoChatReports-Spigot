@@ -1,0 +1,14 @@
+name: NoChatReports
+version: '${version}'
+main: '${group}.plugin.NoChatReports'
+api-version: 1.19
+authors: [ TechnicallyCoded ]
+description: "Prevent message signatures from being sent to clients"
+website: "https://tcoded.com"
+softdepend:
+  - ProtocolLib
+  - ProtocolSupport
+  - ViaVersion
+  - ViaBackwards
+  - ViaRewind
+  - Geyser-Spigot
