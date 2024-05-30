@@ -82,6 +82,9 @@ public final class NoChatReports extends JavaPlugin {
         api.init();
 
         api.getEventManager().registerListener(new ChatPacketListener(this), PacketListenerPriority.NORMAL);
+        this.getServer().getPluginManager().registerEvents(new KickListener(this.getConfig().getStringList("invalid-kick-reasons")), this);
+
+        // Update checker
         SimpleUpdateChecker.checkUpdate(this, "[NoChatReports] ", SPIGOT_RESOURCE_ID);
     }
 
