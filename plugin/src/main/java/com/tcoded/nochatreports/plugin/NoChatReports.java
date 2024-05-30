@@ -7,6 +7,7 @@ import com.github.retrooper.packetevents.util.TimeStampMode;
 import com.tcoded.lightlibs.updatechecker.SimpleUpdateChecker;
 import com.tcoded.nochatreports.plugin.listener.ChatPacketListener;
 import com.tcoded.nochatreports.nms.NmsProvider;
+import com.tcoded.nochatreports.plugin.listener.KickListener;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.event.HandlerList;
@@ -48,8 +49,8 @@ public final class NoChatReports extends JavaPlugin {
                     "Yikes, ViaVersion detection!\n" +
                     "Please note that ViaVersion claims that dangerous issues are present when an anti-chat-reporting " +
                     "plugin is installed. Please ignore any fake and scary messages found below. Feel free to test for " +
-                    "incompatibilities, you are unlikely to find any.\n" +
-                    "- Please report any real issues to my GitHub page :) -\n" +
+                    "real incompatibilities, you are unlikely to find any.\n" +
+                    "- Please report any *real* issues to my GitHub page :) -\n" +
                     "***");
         }
         // EssentialsX is known to warn about "unsupported" plugins that don't even mess with their code - Deceptive.
@@ -62,8 +63,8 @@ public final class NoChatReports extends JavaPlugin {
             suspiciousPlugins.add(susPlugin2);
             this.getLogger().warning("EssentialsX found. Please note that Essentials may claim that an " +
                     "anti-chat-reporting plugin is 'unsupported' when installed. Feel free to ignore any 'unsupported' " +
-                    "messages below. Feel free to test for incompatibilities, you are unlikely to find any. Please report " +
-                    "any real issues to my GitHub :)");
+                    "messages below. And also feel free to test for incompatibilities, you are unlikely to find any.. " +
+                    "But if you do, please report any issues to my GitHub :)");
         }
 
 
@@ -71,6 +72,7 @@ public final class NoChatReports extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        // Utils
         String bukkitVersion = this.getServer().getBukkitVersion();
         String mcVersion = bukkitVersion.substring(0, bukkitVersion.indexOf("-"));
 
@@ -81,6 +83,7 @@ public final class NoChatReports extends JavaPlugin {
         api.getSettings().debug(false).bStats(false).checkForUpdates(false).timeStampMode(TimeStampMode.MILLIS).reEncodeByDefault(true);
         api.init();
 
+        // Listeners
         api.getEventManager().registerListener(new ChatPacketListener(this), PacketListenerPriority.NORMAL);
         this.getServer().getPluginManager().registerEvents(new KickListener(this.getConfig().getStringList("invalid-kick-reasons")), this);
 

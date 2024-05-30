@@ -24,5 +24,39 @@ hide-scary-popup: true
 # Fabric mod "NoChatReports".
 strip-client-chat-signatures: false
 
-# Essentials/ViaVersion Settings - We believe in user choice...
+# -- Anti-kick settings. --
+# Works on PAPER ONLY.
+# This will prevent the server from kicking
+# players for the following reasons. This
+# will not work on Spigot servers.
+invalid-kick-reasons:
+  - TOO_MANY_PENDING_CHATS
+  - UNSIGNED_CHAT
+  - CHAT_VALIDATION_FAILED
+  - EXPIRED_PROFILE_PUBLIC_KEY
+  - OUT_OF_ORDER_CHAT
+
+# -- Essentials/ViaVersion Settings --
+# Because we believe in user choice...
+#
+# EssentialsX and ViaVersion are two plugins that are known to
+# complain about servers installing plugins similar to this one.
+# They will display a huge warning or error message in the console
+# purely based on detecting the name of plugins they don't like.
+# Please note that this is purely based on opinion and not due to
+# any true dangers about this plugin. Feel free to read the source
+# code and see for yourself...
+#
+# We've never had to blacklist a plugin or warn against its usage
+# since we feel like it's not our role as developers to moderate
+# the plugins that server owners want to use. If a plugin is
+# truly incompatible with ours, support channels are available to
+# RESOLVE the issue, not just complain about it. If you agree with
+# this, please take the time to write a **polite** yet unambiguous
+# review pressuring these 2 plugins to stop this unnecessary and
+# unwanted behavior. (Should their behavior change, this setting
+# will be removed.)
+#
+# Set to false is you care to see massive red spam errors in your
+# console.
 disable-plugin-policing: true
