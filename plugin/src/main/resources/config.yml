@@ -1,5 +1,28 @@
+# -- Server Chat Settings --
+# Enable this to make the plugin modify chat
+# packets in order to remove chat signatures
+# going FROM the server TO the client. This
+# will prevent the clients from being able to
+# report the other players' chat messages.
+strip-server-chat-signatures: true
+
+# -- Other Server Related Settings --
+# A pop-up will be shown to players when they
+# join the server if this is set to false.
+#
+# Hiding is enabled by default since it tends
+# to scare players, or at the very least,
+# annoy them while bringing no real value.
 hide-scary-popup: true
-strip-client-chat-signatures: true
+
+# -- Client Chat Settings --
+# Enable this to make the plugin modify chat
+# packets in order to remove chat signatures
+# coming FROM the clients. This will act as if
+# the client never sent the signature in the
+# first place. - Mimics the behavior of the
+# Fabric mod "NoChatReports".
+strip-client-chat-signatures: false
 
 # Essentials/ViaVersion Settings - We believe in user choice...
 disable-plugin-policing: true

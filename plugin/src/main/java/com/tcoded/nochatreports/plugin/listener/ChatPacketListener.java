@@ -3,19 +3,18 @@ package com.tcoded.nochatreports.plugin.listener;
 import com.github.retrooper.packetevents.event.PacketListener;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
-import com.github.retrooper.packetevents.protocol.nbt.NBTCompound;
-import com.github.retrooper.packetevents.protocol.nbt.NBTList;
-import com.github.retrooper.packetevents.protocol.nbt.codec.NBTCodec;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.packettype.PacketTypeCommon;
+import com.github.retrooper.packetevents.util.crypto.MessageSignData;
+import com.github.retrooper.packetevents.util.crypto.SaltSignature;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientChatMessage;
-import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerJoinGame;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerServerData;
-import com.google.gson.JsonElement;
 import com.tcoded.nochatreports.nms.PlayerChatPacket;
 import com.tcoded.nochatreports.nms.SystemChatPacket;
 import com.tcoded.nochatreports.plugin.NoChatReports;
 import io.netty.buffer.ByteBuf;
+
+import java.time.Instant;
 
 public class ChatPacketListener implements PacketListener {
 
@@ -64,7 +63,9 @@ public class ChatPacketListener implements PacketListener {
 //        }
     }
 
-    private static void handlePlayerChatHeaderPacket(PacketSendEvent event) {
+    private void handlePlayerChatHeaderPacket(PacketSendEvent event) {
+        // Config check
+        if (!plugin.getConfig().getBoolean("strip-server-chat-signatures", true)) return;
         event.setCancelled(true);
     }
 
@@ -77,6 +78,9 @@ public class ChatPacketListener implements PacketListener {
     }
 
     private void handlePlayerChatMessagePacket(PacketSendEvent event) {
+        // Config check
+        if (!plugin.getConfig().getBoolean("strip-server-chat-signatures", true)) return;
+
         PlayerChatPacket wrappedChatPacket = this.plugin.getNmsProvider().wrapChatPacket((ByteBuf) event.getByteBuf());
         SystemChatPacket systemPacket = wrappedChatPacket.toSystem();
 
@@ -120,11 +124,9 @@ public class ChatPacketListener implements PacketListener {
 
             WrapperPlayClientChatMessage wrapper = new WrapperPlayClientChatMessage(event);
 //            wrapper.setLastSeenMessages(null);
-//            wrapper.setMessageSignData(new MessageSignData(new SaltSignature(0L, new byte[0]), Instant.ofEpochMilli(0L), false));
+            wrapper.setMessageSignData(new MessageSignData(new SaltSignature(0L, new byte[0]), Instant.ofEpochMilli(0L), false));
 //            wrapper.setLegacyLastSeenMessages(new LastSeenMessages.LegacyUpdate(LastSeenMessages.EMPTY, null));
 //            wrapper.setMessage("CUSTOM - HAHA");
-
-//            event.
         }
 
     }
