@@ -115,12 +115,8 @@ public class ChatPacketListener implements PacketListener {
 
         if (type == PacketType.Play.Client.CHAT_MESSAGE) {
 
-            System.out.println("hi");
-
             // Config check
             if (!plugin.getConfig().getBoolean("strip-client-chat-signatures", true)) return;
-
-            System.out.println("hi x2");
 
             WrapperPlayClientChatMessage wrapper = new WrapperPlayClientChatMessage(event);
 //            wrapper.setLastSeenMessages(null);
