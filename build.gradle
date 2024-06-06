@@ -1,11 +1,11 @@
 plugins {
     id 'java'
-    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'io.github.goooler.shadow' version '8.1.7'
 }
 
 allprojects {
     group = 'com.tcoded'
-    version = '2.0.0'
+    version = '2.0.0-beta'
 
     repositories {
         mavenCentral()
@@ -25,7 +25,7 @@ allprojects {
 subprojects {
 
     apply plugin: 'java'
-    apply plugin: 'com.github.johnrengelman.shadow'
+    apply plugin: 'io.github.goooler.shadow'
 
     group = rootProject.group + '.nochatreports'
 
@@ -52,7 +52,7 @@ subprojects {
 
 }
 
-assemble {
+tasks.assemble {
     dependsOn shadowJar
 }
 
@@ -62,10 +62,17 @@ dependencies {
 //    implementation project(":nms:v1_19_4")
     implementation project(path: ":nms:v1_19_4", configuration: "reobf")
     implementation project(path: ":nms:v1_20", configuration: "reobf")
+    implementation project(path: ":nms:v1_20_2", configuration: "reobf")
     implementation project(path: ":nms:v1_20_3", configuration: "reobf")
     implementation project(path: ":nms:v1_20_4", configuration: "reobf")
+    implementation project(path: ":nms:v1_20_6", configuration: "reobf")
 
     implementation "com.github.retrooper.packetevents:spigot:2.3.0"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 jar {

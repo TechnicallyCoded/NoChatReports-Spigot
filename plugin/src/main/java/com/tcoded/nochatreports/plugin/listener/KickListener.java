@@ -3,6 +3,7 @@ package com.tcoded.nochatreports.plugin.listener;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 
 import java.lang.reflect.Method;
@@ -10,9 +11,11 @@ import java.util.List;
 
 public class KickListener implements Listener {
 
+    private final String preventedKickMessage;
     private final String[] invalidReasons;
 
-    public KickListener(List<String> invalidReasons) {
+    public KickListener(String preventedKickMessage, List<String> invalidReasons) {
+        this.preventedKickMessage = preventedKickMessage;
         this.invalidReasons = invalidReasons.toArray(String[]::new);
     }
 
@@ -26,14 +29,11 @@ public class KickListener implements Listener {
             String paperReason = cause.name();
 
             for (String invalidReason : invalidReasons) {
-                if (paperReason.equals(invalidReason)) {
-                    event.setCancelled(true);
-                    event.getPlayer().sendMessage(ChatColor.RED.toString() +
-                            "You were almost kicked for invalid chat messages. However, we prevented this from " +
-                            "happening. You may need to rejoin to chat again. We're sorry for the inconvenience. " +
-                            "We <3 Mojang...");
-                    return;
-                }
+                if (!paperReason.equals(invalidReason)) continue;
+
+                event.setCancelled(true);
+                event.getPlayer().sendMessage(preventedKickMessage);
+                return;
             }
 
         } catch (Exception e) {
@@ -42,6 +42,7 @@ public class KickListener implements Listener {
 
         String reason = event.getReason();
         if (reason.equals("Received chat packet with missing or invalid signature.")) {
+            event.getPlayer().sendMessage(preventedKickMessage);
             event.setCancelled(true);
         }
     }

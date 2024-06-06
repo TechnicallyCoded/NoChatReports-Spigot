@@ -1,6 +1,6 @@
 package com.tcoded.nochatreports.nms.v1_20_3;
 
-import com.tcoded.nochatreports.nms.SystemChatPacket;
+import com.tcoded.nochatreports.nms.wrapper.SystemChatPacket;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.ConnectionProtocol;
@@ -17,13 +17,8 @@ public class SystemChatPacketImpl implements SystemChatPacket {
     }
 
     @Override
-    public ByteBuf toByteBuf() {
-        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-
-        int packetId = ConnectionProtocol.PLAY.codec(PacketFlow.CLIENTBOUND).packetId(packet);
-        buf.writeVarInt(packetId);
-        packet.write(buf);
-
-        return buf;
+    public Object toNmsPacket() {
+        return packet;
     }
+
 }

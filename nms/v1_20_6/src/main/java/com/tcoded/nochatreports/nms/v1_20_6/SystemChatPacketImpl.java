@@ -1,4 +1,4 @@
-package com.tcoded.nochatreports.nms.v1_19_4;
+package com.tcoded.nochatreports.nms.v1_20_6;
 
 import com.tcoded.nochatreports.nms.wrapper.SystemChatPacket;
 import net.minecraft.network.protocol.game.ClientboundSystemChatPacket;

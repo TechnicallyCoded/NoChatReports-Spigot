@@ -1,7 +1,7 @@
 package com.tcoded.nochatreports.nms.v1_20_3;
 
-import com.tcoded.nochatreports.nms.PlayerChatPacket;
-import com.tcoded.nochatreports.nms.SystemChatPacket;
+import com.tcoded.nochatreports.nms.wrapper.PlayerChatPacket;
+import com.tcoded.nochatreports.nms.wrapper.SystemChatPacket;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
@@ -12,6 +12,7 @@ import net.minecraft.network.protocol.game.ClientboundSystemChatPacket;
 import net.minecraft.server.dedicated.DedicatedServer;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
+import org.bukkit.craftbukkit.v1_20_R3.CraftServer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -31,9 +32,7 @@ public class PlayerChatPacketImpl implements PlayerChatPacket {
     public SystemChatPacket toSystem() {
         try {
             // Resolve the chat type
-            Server bukkitServer = Bukkit.getServer();
-            Class<? extends @NotNull Server> aClass = bukkitServer.getClass();
-            DedicatedServer nmsServer = (DedicatedServer) aClass.getMethod("getServer").invoke(bukkitServer);
+            DedicatedServer nmsServer = ((CraftServer) Bukkit.getServer()).getServer();
 
             RegistryAccess.Frozen registryAccess = nmsServer.registryAccess();
             Optional<ChatType.Bound> chatType = packet.chatType().resolve(registryAccess);

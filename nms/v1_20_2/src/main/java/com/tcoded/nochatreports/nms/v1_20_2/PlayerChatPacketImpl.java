@@ -1,4 +1,4 @@
-package com.tcoded.nochatreports.nms.v1_20;
+package com.tcoded.nochatreports.nms.v1_20_2;
 
 import com.tcoded.nochatreports.nms.wrapper.PlayerChatPacket;
 import com.tcoded.nochatreports.nms.wrapper.SystemChatPacket;
@@ -11,7 +11,9 @@ import net.minecraft.network.protocol.game.ClientboundPlayerChatPacket;
 import net.minecraft.network.protocol.game.ClientboundSystemChatPacket;
 import net.minecraft.server.dedicated.DedicatedServer;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_20_R1.CraftServer;
+import org.bukkit.Server;
+import org.bukkit.craftbukkit.v1_20_R2.CraftServer;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
@@ -50,4 +52,5 @@ public class PlayerChatPacketImpl implements PlayerChatPacket {
             return null;
         }
     }
+
 }

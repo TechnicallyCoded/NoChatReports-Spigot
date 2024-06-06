@@ -1,4 +1,4 @@
-package com.tcoded.nochatreports.nms;
+package com.tcoded.nochatreports.nms.wrapper;
 
 public interface PlayerChatPacket {
 

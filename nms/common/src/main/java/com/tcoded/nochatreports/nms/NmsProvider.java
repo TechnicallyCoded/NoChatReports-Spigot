@@ -1,10 +1,13 @@
 package com.tcoded.nochatreports.nms;
 
+import com.tcoded.nochatreports.nms.wrapper.PlayerChatPacket;
+import com.tcoded.nochatreports.nms.wrapper.SystemChatPacket;
 import io.netty.buffer.ByteBuf;
+import org.bukkit.entity.Player;
 
 import java.lang.reflect.Constructor;
 
-public abstract class NmsProvider {
+public abstract class NmsProvider<T> {
 
     public static NmsProvider getNmsProvider(String minecraftVersion) {
         try {
@@ -23,4 +26,9 @@ public abstract class NmsProvider {
     }
 
     public abstract PlayerChatPacket wrapChatPacket(ByteBuf packet);
+
+    public abstract void sendSystemPacket(Player player, SystemChatPacket systemPacket);
+
+    public abstract T getNmsPlayer(Player player);
+
 }

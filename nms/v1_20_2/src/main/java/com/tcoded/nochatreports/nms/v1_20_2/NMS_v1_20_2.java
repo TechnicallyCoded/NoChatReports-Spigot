@@ -1,4 +1,4 @@
-package com.tcoded.nochatreports.nms.v1_20_4;
+package com.tcoded.nochatreports.nms.v1_20_2;
 
 import com.tcoded.nochatreports.nms.NmsProvider;
 import com.tcoded.nochatreports.nms.wrapper.PlayerChatPacket;
@@ -7,11 +7,11 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ServerboundChatAckPacket;
 import net.minecraft.server.level.ServerPlayer;
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 @SuppressWarnings("unused")
-public class NMS_v1_20_4 extends NmsProvider<ServerPlayer> {
+public class NMS_v1_20_2 extends NmsProvider<ServerPlayer> {
 
     @Override
     public PlayerChatPacket wrapChatPacket(ByteBuf byteBuf) {

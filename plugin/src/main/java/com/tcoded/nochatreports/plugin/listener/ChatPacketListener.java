@@ -9,10 +9,12 @@ import com.github.retrooper.packetevents.util.crypto.MessageSignData;
 import com.github.retrooper.packetevents.util.crypto.SaltSignature;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientChatMessage;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerServerData;
-import com.tcoded.nochatreports.nms.PlayerChatPacket;
-import com.tcoded.nochatreports.nms.SystemChatPacket;
+import com.tcoded.nochatreports.nms.NmsProvider;
+import com.tcoded.nochatreports.nms.wrapper.PlayerChatPacket;
+import com.tcoded.nochatreports.nms.wrapper.SystemChatPacket;
 import com.tcoded.nochatreports.plugin.NoChatReports;
 import io.netty.buffer.ByteBuf;
+import org.bukkit.entity.Player;
 
 import java.time.Instant;
 
@@ -37,30 +39,6 @@ public class ChatPacketListener implements PacketListener {
         else if (type == PacketType.Play.Server.SERVER_DATA) {
             handleServerDataPacket(event);
         }
-        else if (type == PacketType.Play.Server.JOIN_GAME) {
-            handleJoinGamePacket(event);
-        }
-    }
-
-    private void handleJoinGamePacket(PacketSendEvent event) {
-//        WrapperPlayServerJoinGame wrapper = new WrapperPlayServerJoinGame(event);
-//        NBTCompound dimensionCodec = wrapper.getDimensionCodec();
-//
-//        NBTCompound chatTypeCompound = dimensionCodec.getCompoundTagOrNull("minecraft:chat_type");
-//        NBTList<NBTCompound> chatTypeValues = chatTypeCompound.getCompoundListTagOrNull("value");
-//
-//        for (NBTCompound chatType : chatTypeValues.getTags()) {
-//            NBTCompound chatCompound = chatType.getCompoundTagOrNull("chat");
-//            NBTCompound narrationCompound = chatType.getCompoundTagOrNull("narration");
-//
-//            String chatTranslationKey = chatCompound.getStringTagValueOrNull("translation_key");
-//            System.out.println("chatTranslationKey = " + chatTranslationKey);
-//            NBTCompound chatStyle = chatCompound.getCompoundTagOrNull("style");
-//            JsonElement jsonElement = NBTCodec.nbtToJson(chatStyle, false);
-//            System.out.println(jsonElement.toString());
-//
-//            String narrationTranslationKey = narrationCompound.getStringTagValueOrNull("translation_key");
-//        }
     }
 
     private void handlePlayerChatHeaderPacket(PacketSendEvent event) {
@@ -78,39 +56,19 @@ public class ChatPacketListener implements PacketListener {
     }
 
     private void handlePlayerChatMessagePacket(PacketSendEvent event) {
-        // Config check
-        if (!plugin.getConfig().getBoolean("strip-server-chat-signatures", true)) return;
-
-        PlayerChatPacket wrappedChatPacket = this.plugin.getNmsProvider().wrapChatPacket((ByteBuf) event.getByteBuf());
-        SystemChatPacket systemPacket = wrappedChatPacket.toSystem();
 
         event.setCancelled(true);
 
-        ByteBuf systemPacketByteBuf = systemPacket.toByteBuf();
-//        PacketWrapper<WrapperPlayServerSystemChatMessage> wrapper = new PacketWrapper<>(PacketType.Play.Server.SYSTEM_CHAT_MESSAGE);
-//        wrapper.buffer = systemPacketByteBuf;
-//        WrapperPlayServerSystemChatMessage wrapper = new WrapperPlayServerSystemChatMessage(false, Component.text("CUSTOM"));
-        event.getUser().sendPacket(systemPacketByteBuf);
+        // Config check
+        if (!plugin.getConfig().getBoolean("strip-server-chat-signatures", true)) return;
 
-//        net.kyori.adventure.chat.ChatType.chatType(KeyedValue.keyedValue(chatType.getName().getKey()))
-//        chatType.
-        // chat.type.text
-//            TranslatableComponent translatable = Component.translatable(
-//                    "chat.type.text",
-//                    Component.text(name),
-//                    Component.text(AdventureSerializer.asVanilla(chatContent))
-//            );
-//        String json = AdventureSerializer.toJson(translatable);
-//        System.out.println("AdventureSerializer.toJson(translatable) = " + json);
-//        WrapperPlayServerSystemChatMessage newWrapper = new WrapperPlayServerSystemChatMessage(
-//                false, translatable
-//        );
+        NmsProvider<?> nmsProvider = this.plugin.getNmsProvider();
 
-//        User user = event.getUser();
-//        UUID receiverId = user.getUUID();
-//        BaseComponent[] bungeeComponents = ComponentSerializer.parse(json);
-//        Bukkit.getPlayer(receiverId).spigot().sendMessage(bungeeComponents);
-//        user.sendPacketSilently(newWrapper);
+        PlayerChatPacket wrappedChatPacket = nmsProvider.wrapChatPacket((ByteBuf) event.getByteBuf());
+        SystemChatPacket systemPacket = wrappedChatPacket.toSystem();
+
+        Player player = (Player) event.getPlayer();
+        nmsProvider.sendSystemPacket(player, systemPacket);
     }
 
     @Override
@@ -123,10 +81,7 @@ public class ChatPacketListener implements PacketListener {
             if (!plugin.getConfig().getBoolean("strip-client-chat-signatures", true)) return;
 
             WrapperPlayClientChatMessage wrapper = new WrapperPlayClientChatMessage(event);
-//            wrapper.setLastSeenMessages(null);
             wrapper.setMessageSignData(new MessageSignData(new SaltSignature(0L, new byte[0]), Instant.ofEpochMilli(0L), false));
-//            wrapper.setLegacyLastSeenMessages(new LastSeenMessages.LegacyUpdate(LastSeenMessages.EMPTY, null));
-//            wrapper.setMessage("CUSTOM - HAHA");
         }
 
     }

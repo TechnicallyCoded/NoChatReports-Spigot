@@ -1,4 +1,14 @@
+# --------------------------------------------
+# NoChatReports Configuration
+# --------------------------------------------
+#
+# The default configuration settings should be
+# fine for most servers. However, you may choose
+# to modify them to suit your needs.
+
+
 # -- Server Chat Settings --
+
 # Enable this to make the plugin modify chat
 # packets in order to remove chat signatures
 # going FROM the server TO the client. This
@@ -6,7 +16,9 @@
 # report the other players' chat messages.
 strip-server-chat-signatures: true
 
+
 # -- Other Server Related Settings --
+
 # A pop-up will be shown to players when they
 # join the server if this is set to false.
 #
@@ -15,7 +27,9 @@ strip-server-chat-signatures: true
 # annoy them while bringing no real value.
 hide-scary-popup: true
 
+
 # -- Client Chat Settings --
+
 # Enable this to make the plugin modify chat
 # packets in order to remove chat signatures
 # coming FROM the clients. This will act as if
@@ -24,8 +38,19 @@ hide-scary-popup: true
 # Fabric mod "NoChatReports".
 strip-client-chat-signatures: false
 
+
 # -- Anti-kick settings. --
 # Works on PAPER ONLY.
+
+# This is the message that will be sent to the
+# player when the server attempts to kick them
+# for invalid chat message errors. Since the
+# chat validation feature is highly sensitive
+# to any minor missed packet or inconsistency,
+# this message may be sent to players around
+# once every few days.
+pre: "&cYou were almost kicked for invalid chat messages. However, we prevented this from happening. You may need to rejoin to chat again. We're sorry for the inconvenience!"
+
 # This will prevent the server from kicking
 # players for the following reasons. This
 # will not work on Spigot servers.
@@ -35,6 +60,7 @@ invalid-kick-reasons:
   - CHAT_VALIDATION_FAILED
   - EXPIRED_PROFILE_PUBLIC_KEY
   - OUT_OF_ORDER_CHAT
+
 
 # -- Essentials/ViaVersion Settings --
 # Because we believe in user choice...
@@ -51,12 +77,12 @@ invalid-kick-reasons:
 # since we feel like it's not our role as developers to moderate
 # the plugins that server owners want to use. If a plugin is
 # truly incompatible with ours, support channels are available to
-# RESOLVE the issue, not just complain about it. If you agree with
-# this, please take the time to write a **polite** yet unambiguous
+# resolve the issue, not just complain about it. If you agree with
+# this, please take the time to write a respectful yet unambiguous
 # review pressuring these 2 plugins to stop this unnecessary and
 # unwanted behavior. (Should their behavior change, this setting
 # will be removed.)
 #
-# Set to false is you care to see massive red spam errors in your
+# Set to false is you want to see massive red spam errors in your
 # console.
 disable-plugin-policing: true
