@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 @SuppressWarnings("unused")
@@ -120,7 +121,8 @@ public final class NoChatReports extends JavaPlugin {
         ), this);
 
         // Update checker
-        SimpleUpdateChecker.checkUpdate(this, "[NoChatReports] ", SPIGOT_RESOURCE_ID);
+        Consumer<Runnable> asyncConsumer = runnable -> this.foliaLib.getScheduler().runAsync(wt -> runnable.run());
+        SimpleUpdateChecker.checkUpdate(this, "[NoChatReports] ", SPIGOT_RESOURCE_ID, asyncConsumer);
     }
 
     @Override

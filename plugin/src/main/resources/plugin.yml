@@ -5,6 +5,7 @@ api-version: 1.19
 authors: [ TechnicallyCoded ]
 description: "Prevent message signatures from being sent to clients"
 website: "https://tcoded.com"
+folia-supported: true
 softdepend:
   - ProtocolLib
   - ProtocolSupport
