@@ -2,13 +2,14 @@ package com.tcoded.nochatreports.nms;
 
 public enum NmsVersion {
 
-    v1_20_6 ("1\\.20\\.[5-6]"),
-    v1_20_4 ("1\\.20\\.4"),
-    v1_20 ("1\\.20(\\.[1-3])?"),
-    v1_19_4 ("1\\.19\\.4"),
-    v1_19_3 ("1\\.19\\.3"),
-    v1_19_2 ("1\\.19\\.2"),
-    v1_19_1 ("1\\.19\\.1")
+    v1_21 ("1_21"),
+    v1_20_6 ("1_20_[5-6]"),
+    v1_20_4 ("1_20_4"),
+    v1_20 ("1_20(_[1-3])?"),
+    v1_19_4 ("1_19_4"),
+    v1_19_3 ("1_19_3"),
+    v1_19_2 ("1_19_2"),
+    v1_19_1 ("1_19_1")
     ;
 
     String[] versions;
@@ -25,9 +26,10 @@ public enum NmsVersion {
     public static NmsVersion getNmsVersion(String version) {
         NmsVersion[] values = NmsVersion.values();
 
+        String replacedVersion = version.replace(".", "_");
         for (NmsVersion nmsVersion : values) {
             for (String matchVersion : nmsVersion.getVersions()) {
-                if (version.matches(matchVersion)) {
+                if (replacedVersion.matches(matchVersion)) {
                     return nmsVersion;
                 }
             }

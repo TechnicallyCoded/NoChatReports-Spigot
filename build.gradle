@@ -5,7 +5,7 @@ plugins {
 
 allprojects {
     group = 'com.tcoded'
-    version = '2.0.0-beta'
+    version = '2.0.0-b2'
 
     repositories {
         mavenCentral()
@@ -19,6 +19,10 @@ allprojects {
             url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
         }
         maven { url 'https://jitpack.io' }
+        maven {
+            name = "devmart-other"
+            url = "https://nexuslite.gcnt.net/repos/other/"
+        }
     }
 }
 
@@ -66,6 +70,7 @@ dependencies {
     implementation project(path: ":nms:v1_20_3", configuration: "reobf")
     implementation project(path: ":nms:v1_20_4", configuration: "reobf")
     implementation project(path: ":nms:v1_20_6", configuration: "reobf")
+    implementation project(path: ":nms:v1_21", configuration: "reobf")
 
     implementation "com.github.retrooper.packetevents:spigot:2.3.0"
 }

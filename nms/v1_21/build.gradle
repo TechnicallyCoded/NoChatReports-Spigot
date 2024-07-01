@@ -1,0 +1,17 @@
+plugins {
+    id 'io.papermc.paperweight.userdev' version '1.7.1'
+}
+
+dependencies {
+    paperweightDevelopmentBundle("io.papermc.paper:dev-bundle:1.21-R0.1-SNAPSHOT")
+    compileOnly project(":nms:common")
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+tasks.named('assemble') {
+    dependsOn 'reobfJar'
+}

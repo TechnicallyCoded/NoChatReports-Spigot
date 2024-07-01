@@ -13,6 +13,12 @@ import org.bukkit.entity.Player;
 @SuppressWarnings("unused")
 public class NMS_v1_20_2 extends NmsProvider<ServerPlayer> {
 
+    private final boolean isPaper;
+
+    public NMS_v1_20_2(boolean isPaper) {
+        this.isPaper = isPaper;
+    }
+
     @Override
     public PlayerChatPacket wrapChatPacket(ByteBuf byteBuf) {
         return new PlayerChatPacketImpl(byteBuf);
@@ -29,7 +35,8 @@ public class NMS_v1_20_2 extends NmsProvider<ServerPlayer> {
     @Override
     public ServerPlayer getNmsPlayer(Player player) {
         CraftPlayer craftPlayer = (CraftPlayer) player;
-        return (ServerPlayer) craftPlayer.getHandleRaw();
+        if (isPaper) return (ServerPlayer) craftPlayer.getHandleRaw();
+        else return craftPlayer.getHandle();
     }
 
 }

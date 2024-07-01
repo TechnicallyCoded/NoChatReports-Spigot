@@ -4,6 +4,7 @@ import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.PacketEventsAPI;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.github.retrooper.packetevents.util.TimeStampMode;
+import com.tcoded.folialib.FoliaLib;
 import com.tcoded.lightlibs.updatechecker.SimpleUpdateChecker;
 import com.tcoded.nochatreports.plugin.listener.ChatPacketListener;
 import com.tcoded.nochatreports.nms.NmsProvider;
@@ -29,6 +30,7 @@ public final class NoChatReports extends JavaPlugin {
     private static final int SPIGOT_RESOURCE_ID = 102931;
     private final List<Plugin> suspiciousPlugins;
     private NmsProvider<?> nmsProvider;
+    private FoliaLib foliaLib;
 
     public NoChatReports() {
         this.suspiciousPlugins = new ArrayList<>();
@@ -99,11 +101,12 @@ public final class NoChatReports extends JavaPlugin {
     @Override
     public void onEnable() {
         // Utils
+        this.foliaLib = new FoliaLib(this);
         String bukkitVersion = this.getServer().getBukkitVersion();
         String mcVersion = bukkitVersion.substring(0, bukkitVersion.indexOf("-"));
 
         getLogger().info("Loading support for Minecraft version: " + mcVersion);
-        this.nmsProvider = NmsProvider.getNmsProvider(mcVersion);
+        this.nmsProvider = NmsProvider.getNmsProvider(mcVersion, this.foliaLib.isFolia() || this.foliaLib.isPaper());
 
         PacketEventsAPI<?> api = PacketEvents.getAPI();
         api.getSettings().debug(false).bStats(false).checkForUpdates(false).timeStampMode(TimeStampMode.MILLIS).reEncodeByDefault(true);

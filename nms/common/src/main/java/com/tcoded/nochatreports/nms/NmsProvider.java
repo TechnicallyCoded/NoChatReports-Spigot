@@ -9,15 +9,15 @@ import java.lang.reflect.Constructor;
 
 public abstract class NmsProvider<T> {
 
-    public static NmsProvider getNmsProvider(String minecraftVersion) {
+    public static NmsProvider getNmsProvider(String minecraftVersion, boolean isPaper) {
         try {
             String versionName = NmsVersion.getNmsVersion(minecraftVersion).name();
             Class<?> providerName = Class.forName(
                     NmsProvider.class.getPackageName() + "." + versionName + ".NMS_" + versionName
             );
-            Constructor<?> constructor = providerName.getConstructor();
+            Constructor<?> constructor = providerName.getConstructor(boolean.class);
 
-            return (NmsProvider) constructor.newInstance();
+            return (NmsProvider) constructor.newInstance(isPaper);
         } catch (Exception e) {
             e.printStackTrace();
         }
