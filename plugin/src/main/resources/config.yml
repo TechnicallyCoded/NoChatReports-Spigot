@@ -49,7 +49,7 @@ strip-client-chat-signatures: false
 # to any minor missed packet or inconsistency,
 # this message may be sent to players around
 # once every few days.
-pre: "&cYou were almost kicked for invalid chat messages. However, we prevented this from happening. You may need to rejoin to chat again. We're sorry for the inconvenience!"
+prevented-kick-message: "&cYou were almost kicked for invalid chat messages. However, we prevented this from happening. You may need to rejoin to chat again. We're sorry for the inconvenience!"
 
 # This will prevent the server from kicking
 # players for the following reasons. This
@@ -68,7 +68,7 @@ invalid-kick-reasons:
 # EssentialsX and ViaVersion are two plugins that are known to
 # complain about servers installing plugins similar to this one.
 # They will display a huge warning or error message in the console
-# purely based on detecting the name of plugins they don't like.
+# purely based on detecting the name of plugins they dislike.
 # Please note that this is purely based on opinion and not due to
 # any true dangers about this plugin. Feel free to read the source
 # code and see for yourself...
@@ -83,6 +83,6 @@ invalid-kick-reasons:
 # unwanted behavior. (Should their behavior change, this setting
 # will be removed.)
 #
-# Set to false is you want to see massive red spam errors in your
+# Set to false is you want to see massive red spam "errors" in your
 # console.
 disable-plugin-policing: true
