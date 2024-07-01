@@ -5,10 +5,11 @@ plugins {
 
 allprojects {
     group = 'com.tcoded'
-    version = '2.0.0-b2'
+    version = '2.0.0-b3'
 
     repositories {
         mavenCentral()
+
         maven {
             name = "codemc-snapshots"
             url = "https://repo.codemc.io/repository/maven-releases/"
@@ -18,11 +19,14 @@ allprojects {
             name = "spigotmc-repo"
             url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
         }
+
         maven { url 'https://jitpack.io' }
+
         maven {
             name = "devmart-other"
             url = "https://nexuslite.gcnt.net/repos/other/"
         }
+
     }
 }
 
@@ -72,7 +76,7 @@ dependencies {
     implementation project(path: ":nms:v1_20_6", configuration: "reobf")
     implementation project(path: ":nms:v1_21", configuration: "reobf")
 
-    implementation "com.github.retrooper.packetevents:spigot:2.3.0"
+    implementation "com.github.retrooper:packetevents-spigot:2.4.0"
 }
 
 java {
@@ -87,9 +91,14 @@ jar {
 shadowJar {
     archiveClassifier.set("")
 
+    // PacketEvents
     relocate 'com.github.retrooper.packetevents', "${project.group}.nochatreports.lib.packetevents.api"
     relocate 'io.github.retrooper.packetevents', "${project.group}.nochatreports.lib.packetevents.impl"
     relocate 'net.kyori', "${project.group}.nochatreports.lib.packetevents.kyori"
 
+    // SpigotUpdateChecker
     relocate 'com.tcoded.lightlibs.updatechecker', "${project.group}.nochatreports.lib.spigotupdatechecker"
+
+    // FoliaLib
+    relocate "com.tcoded.folialib", "com.tcoded.nochatreports.plugin.lib.folialib"
 }
