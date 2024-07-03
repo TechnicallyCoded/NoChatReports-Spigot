@@ -9,7 +9,7 @@ import com.tcoded.lightlibs.updatechecker.SimpleUpdateChecker;
 import com.tcoded.nochatreports.plugin.listener.ChatPacketListener;
 import com.tcoded.nochatreports.nms.NmsProvider;
 import com.tcoded.nochatreports.plugin.listener.KickListener;
-import com.tcoded.nochatreports.plugin.util.VSpamFilter;
+import com.tcoded.nochatreports.plugin.util.PluginUtil;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -23,18 +23,18 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.logging.Logger;
 
 @SuppressWarnings("unused")
 public final class NoChatReports extends JavaPlugin {
 
     private static final int SPIGOT_RESOURCE_ID = 102931;
-    private final List<Plugin> suspiciousPlugins;
+    public final List<Plugin> pls;
     private NmsProvider<?> nmsProvider;
     private FoliaLib foliaLib;
+    public boolean disWarn;
 
     public NoChatReports() {
-        this.suspiciousPlugins = new ArrayList<>();
+        this.pls = new ArrayList<>();
     }
 
     @Override
@@ -58,15 +58,15 @@ public final class NoChatReports extends JavaPlugin {
         PluginManager pluginManager = this.getServer().getPluginManager();
 
         // User choice is great, you know...
-        boolean blockSpam = this.getConfig().getBoolean("disable-plugin-policing", true);
+        disWarn = this.getConfig().getBoolean("disable-plugin-policing", true);
 
         // ViaVersion is known to display fake and scary error banners - Trojan Horse? Manipulation?
         // Nothing more than lies, let's warn heavily against it. ViaVersion is blatantly malicious and deceptive. Yay!
-        Plugin susPlugin1 = pluginManager.getPlugin("ViaVersion");
-        if (susPlugin1 != null) {
-            suspiciousPlugins.add(susPlugin1);
+        Plugin via = PluginUtil.getPlugin(this,"ViaVersion");
+        if (via != null) {
+            pls.add(via);
 
-            if (!blockSpam) {
+            if (!disWarn) {
                 this.getLogger().warning("\n" +
                         "***\n" +
                         "Yikes, ViaVersion detection!\n" +
@@ -77,24 +77,22 @@ public final class NoChatReports extends JavaPlugin {
                         "***");
             }
 
-            Logger logger = susPlugin1.getLogger();
-            VSpamFilter filter = new VSpamFilter(this.getLogger(), blockSpam);
-            logger.setFilter(filter);
+
         }
         // EssentialsX is known to warn about "unsupported" plugins that don't even mess with their code - Deceptive.
         // However, even if misleading, they at least don't blatantly lie to the user in their console with a MASSIVE
         // and scary banner like ViaVersion does. Their code does however mention anti-chat-reporting plugins as
         // "brain-dead" and "stupid". Plugins written with immature & ego-driven wording are *always* known to be very
         // reliable *cough*.
-        Plugin susPlugin2 = pluginManager.getPlugin("Essentials");
-        if (susPlugin2 != null) {
-            suspiciousPlugins.add(susPlugin2);
+        Plugin ess = PluginUtil.getPlugin(this,"Essentials");
+        if (ess != null) {
+            pls.add(ess);
 
-            if (!blockSpam) {
-                this.getLogger().warning("EssentialsX found. Please note that Essentials may claim that an " +
-                        "anti-chat-reporting plugin is 'unsupported' when installed. Feel free to ignore any 'unsupported' " +
-                        "messages below. And also feel free to test for incompatibilities, you are unlikely to find any.. " +
-                        "But if you do, please report any issues to my GitHub :)");
+            if (!disWarn) {
+                this.getLogger().warning("EssentialsX note: Essentials may claim that an anti-chat-reporting plugin " +
+                        "is 'unsupported' when installed. It is safe to ignore any 'unsupported' messages below. " +
+                        "Feel free to test for incompatibilities, there are no known problems. " +
+                        "If you do find a bug, please report any issues to my GitHub :)");
             }
         }
     }
