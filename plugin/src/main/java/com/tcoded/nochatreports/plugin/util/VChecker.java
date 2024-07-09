@@ -33,11 +33,11 @@ public class VChecker implements Filter {
                     logger.warning("description page on SpigotMC.");
                     logger.warning(" ");
                     logger.warning("Please note that ViaVersion is known to purposefully fabricate non-existent");
-                    logger.warning("issues when a chat reporting plugin is installed. Please ignore any fake");
+                    logger.warning("issues when a chat reporting plugin is installed. Please ignore these fake");
                     logger.warning("scary messages..");
                     logger.warning(" ");
                     logger.warning("Once you have verified that there are no real issues, feel free to disable");
-                    logger.warning("this spam in NoChatReports' config.yml file.");
+                    logger.warning("this message in NoChatReports' config.yml file.");
                     logger.warning("(This message will automatically disappear when ViaVersion fixes their plugin.)");
                 }
             } else {
