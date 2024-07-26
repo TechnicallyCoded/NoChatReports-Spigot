@@ -9,7 +9,7 @@ public enum SupportedVersions {
     v_1_20,
     v_1_19_4,
 //    v_1_19_3,
-//    v_1_19_2,
+    v_1_19_2,
 //    v_1_19_1
     ;
 

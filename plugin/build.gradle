@@ -1,5 +1,5 @@
 dependencies {
-    compileOnly "org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT"
+    compileOnly "org.spigotmc:spigot-api:1.19.2-R0.1-SNAPSHOT"
     compileOnly "com.github.retrooper:packetevents-spigot:2.4.0"
     compileOnly project(":nms:common")
     // https://mvnrepository.com/artifact/io.netty/netty-buffer
