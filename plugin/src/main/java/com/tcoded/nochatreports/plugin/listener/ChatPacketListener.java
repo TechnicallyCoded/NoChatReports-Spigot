@@ -78,7 +78,7 @@ public class ChatPacketListener implements PacketListener {
         if (type == PacketType.Play.Client.CHAT_MESSAGE) {
 
             // Config check
-            if (!plugin.getConfig().getBoolean("strip-client-chat-signatures", true)) return;
+            if (!plugin.getConfig().getBoolean("strip-client-chat-signatures", false)) return;
 
             WrapperPlayClientChatMessage wrapper = new WrapperPlayClientChatMessage(event);
             wrapper.setMessageSignData(new MessageSignData(new SaltSignature(0L, new byte[0]), Instant.ofEpochMilli(0L), false));
