@@ -36,6 +36,9 @@ hide-scary-popup: true
 # the client never sent the signature in the
 # first place. - Mimics the behavior of the
 # Fabric mod "NoChatReports".
+# DO NOT ENABLE THIS IF YOU DON'T KNOW WHAT
+# YOU'RE DOING. NEWER MINECRAFT VERSIONS DO
+# NOT SUPPORT THIS FEATURE.
 strip-client-chat-signatures: false
 
 
@@ -47,7 +50,7 @@ strip-client-chat-signatures: false
 # for invalid chat message errors. Since the
 # chat validation feature is highly sensitive
 # to any minor missed packet or inconsistency,
-# this message may be sent to players around
+# this message may be sent to players about
 # once every few days.
 prevented-kick-message: "&cYou were almost kicked for invalid chat messages. However, we prevented this from happening. You may need to rejoin to chat again. We're sorry for the inconvenience!"
 
