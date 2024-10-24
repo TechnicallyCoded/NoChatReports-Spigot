@@ -5,8 +5,7 @@ import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.packettype.PacketTypeCommon;
-import com.github.retrooper.packetevents.util.crypto.MessageSignData;
-import com.github.retrooper.packetevents.util.crypto.SaltSignature;
+import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientChatCommand;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientChatMessage;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerServerData;
 import com.tcoded.nochatreports.nms.NmsProvider;
@@ -15,8 +14,6 @@ import com.tcoded.nochatreports.nms.wrapper.SystemChatPacket;
 import com.tcoded.nochatreports.plugin.NoChatReports;
 import io.netty.buffer.ByteBuf;
 import org.bukkit.entity.Player;
-
-import java.time.Instant;
 
 public class ChatPacketListener implements PacketListener {
 
@@ -81,7 +78,18 @@ public class ChatPacketListener implements PacketListener {
             if (!plugin.getConfig().getBoolean("strip-client-chat-signatures", false)) return;
 
             WrapperPlayClientChatMessage wrapper = new WrapperPlayClientChatMessage(event);
-            wrapper.setMessageSignData(new MessageSignData(new SaltSignature(0L, new byte[0]), Instant.ofEpochMilli(0L), false));
+            // Fake signature? new MessageSignData(new SaltSignature(0L, new byte[0]), Instant.ofEpochMilli(0L), false)
+            wrapper.setMessageSignData(null);
+        }
+        else if (type == PacketType.Play.Client.CHAT_COMMAND) {
+            // Config check
+            if (!plugin.getConfig().getBoolean("strip-client-chat-signatures", false)) return;
+
+            WrapperPlayClientChatCommand wrapper = new WrapperPlayClientChatCommand(event);
+            wrapper.setMessageSignData(null);
+        }
+        else if (type == PacketType.Play.Client.CHAT_SESSION_UPDATE) {
+            event.setCancelled(true);
         }
 
     }
