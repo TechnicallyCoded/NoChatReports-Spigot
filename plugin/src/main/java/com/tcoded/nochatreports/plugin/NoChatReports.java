@@ -10,6 +10,7 @@ import com.tcoded.nochatreports.plugin.listener.ChatPacketListener;
 import com.tcoded.nochatreports.nms.NmsProvider;
 import com.tcoded.nochatreports.plugin.listener.KickListener;
 import com.tcoded.nochatreports.plugin.util.PluginUtil;
+import com.tcoded.nochatreports.plugin.util.SimpleLogFilter;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -23,6 +24,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.logging.Level;
 
 @SuppressWarnings("unused")
 public final class NoChatReports extends JavaPlugin {
@@ -41,7 +43,7 @@ public final class NoChatReports extends JavaPlugin {
     public void onLoad() {
         this.saveDefaultConfig();
 
-        // Set defaults
+        // --- Set defaults ---
         try {
             InputStream defaultConfigStream = this.getResource("config.yml");
             if (defaultConfigStream == null) throw new Exception("Default config not found!");
@@ -51,10 +53,19 @@ public final class NoChatReports extends JavaPlugin {
             e.printStackTrace();
         }
 
+        // --- PacketEvents ---
+        // Don't use warn level for packetevents. We don't use anything too version sensitive.
+        new SimpleLogFilter(this.getLogger(), record -> {
+            boolean isVersionError = record.getMessage().contains("[packetevents] We currently do not support the minecraft version");
+            if (isVersionError) System.out.println("IS VERSION ERROR");
+            if (isVersionError) record.setLevel(Level.INFO);
+            return true;
+        });
+
         PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
         PacketEvents.getAPI().load();
 
-        // Check if we need to handle intentional misbehavior
+        // --- Check if we need to handle intentional misbehavior ---
         PluginManager pluginManager = this.getServer().getPluginManager();
 
         // User choice is great, you know...
@@ -77,13 +88,13 @@ public final class NoChatReports extends JavaPlugin {
                         "***");
             }
 
-
         }
+
         // EssentialsX is known to warn about "unsupported" plugins that don't even mess with their code - Deceptive.
         // However, even if misleading, they at least don't blatantly lie to the user in their console with a MASSIVE
         // and scary banner like ViaVersion does. Their code does however mention anti-chat-reporting plugins as
         // "brain-dead" and "stupid". Plugins written with immature & ego-driven wording are *always* known to be very
-        // reliable *cough*.
+        // reliable...
         Plugin ess = PluginUtil.getPlugin(this,"Essentials");
         if (ess != null) {
             pls.add(ess);

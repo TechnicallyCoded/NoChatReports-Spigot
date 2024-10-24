@@ -12,8 +12,8 @@ public class VChecker implements Filter {
     private boolean ncr = false;
 
 
-    public VChecker(Logger antiPluginPolice, boolean skip) {
-        this.logger = antiPluginPolice;
+    public VChecker(Logger log, boolean skip) {
+        this.logger = log;
         this.skip = skip;
     }
 
