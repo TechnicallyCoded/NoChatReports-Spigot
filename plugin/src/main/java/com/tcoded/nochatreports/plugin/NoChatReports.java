@@ -57,7 +57,6 @@ public final class NoChatReports extends JavaPlugin {
         // Don't use warn level for packetevents. We don't use anything too version sensitive.
         new SimpleLogFilter(this.getLogger(), record -> {
             boolean isVersionError = record.getMessage().contains("[packetevents] We currently do not support the minecraft version");
-            if (isVersionError) System.out.println("IS VERSION ERROR");
             if (isVersionError) record.setLevel(Level.INFO);
             return true;
         });
