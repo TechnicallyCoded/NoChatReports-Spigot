@@ -5,10 +5,13 @@ import com.tcoded.nochatreports.nms.wrapper.PlayerChatPacket;
 import com.tcoded.nochatreports.nms.wrapper.SystemChatPacket;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ServerboundChatAckPacket;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.level.ServerPlayer;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+
+import java.util.Properties;
 
 @SuppressWarnings("unused")
 public class NMS_v1_21 extends NmsProvider<ServerPlayer> {
@@ -17,6 +20,14 @@ public class NMS_v1_21 extends NmsProvider<ServerPlayer> {
 
     public NMS_v1_21(boolean isPaper) {
         this.isPaper = isPaper;
+
+        DedicatedServer server = (DedicatedServer) MinecraftServer.getServer();
+        server.settings.update((config) -> {
+            final Properties newProps = new Properties(config.properties);
+            newProps.setProperty("enforce-secure-profile", String.valueOf(false));
+            return config.reload(server.registryAccess(), newProps, server.options);
+        });
+
     }
 
     @Override

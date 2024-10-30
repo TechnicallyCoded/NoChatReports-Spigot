@@ -4,11 +4,18 @@ import com.tcoded.nochatreports.nms.NmsProvider;
 import com.tcoded.nochatreports.nms.wrapper.PlayerChatPacket;
 import com.tcoded.nochatreports.nms.wrapper.SystemChatPacket;
 import io.netty.buffer.ByteBuf;
+import joptsimple.OptionSet;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ServerboundChatAckPacket;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.dedicated.DedicatedServer;
+import net.minecraft.server.dedicated.DedicatedServerProperties;
 import net.minecraft.server.level.ServerPlayer;
 import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+
+import java.lang.reflect.Method;
+import java.util.Properties;
 
 @SuppressWarnings("unused")
 public class NMS_v1_19_4 extends NmsProvider<ServerPlayer> {
@@ -17,6 +24,27 @@ public class NMS_v1_19_4 extends NmsProvider<ServerPlayer> {
 
     public NMS_v1_19_4(boolean isPaper) {
         this.isPaper = isPaper;
+
+        DedicatedServer server = (DedicatedServer) MinecraftServer.getServer();
+        server.settings.update((config) -> {
+            final Properties newProps = new Properties(config.properties);
+            newProps.setProperty("enforce-secure-profile", String.valueOf(false));
+
+            try {
+                Class<? extends DedicatedServerProperties> serverPropsClass = config.getClass();
+                Method reloadMethod = serverPropsClass.getDeclaredMethod("reload", RegistryAccess.class, Properties.class, OptionSet.class);
+
+                boolean prev = reloadMethod.isAccessible();
+                reloadMethod.setAccessible(true);
+
+                DedicatedServerProperties newServerProps = (DedicatedServerProperties) reloadMethod.invoke(config, server.registryAccess(), newProps, server.options);
+                reloadMethod.setAccessible(prev);
+
+                return newServerProps;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @Override
