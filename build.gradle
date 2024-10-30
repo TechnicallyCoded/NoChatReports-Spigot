@@ -5,14 +5,19 @@ plugins {
 
 allprojects {
     group = 'com.tcoded'
-    version = '2.1.1'
+    version = '2.2.0'
 
     repositories {
         mavenCentral()
 
         maven {
-            name = "codemc-snapshots"
+            name = "codemc-releases"
             url = "https://repo.codemc.io/repository/maven-releases/"
+        }
+
+        maven {
+            name = "codemc-snapshots"
+            url = "https://repo.codemc.io/repository/maven-snapshots/"
         }
 
         maven {
@@ -73,7 +78,7 @@ dependencies {
     implementation project(path: ":nms:v1_21_1", configuration: "reobf")
     implementation project(path: ":nms:v1_21_3", configuration: "reobf")
 
-    implementation "com.github.retrooper:packetevents-spigot:2.4.0"
+    implementation "com.github.retrooper:packetevents-spigot:2.6.0-SNAPSHOT"
 }
 
 java {
