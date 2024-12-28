@@ -1,17 +1,13 @@
 package com.tcoded.nochatreports.plugin;
 
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.PacketEventsAPI;
-import com.github.retrooper.packetevents.event.PacketListenerPriority;
-import com.github.retrooper.packetevents.util.TimeStampMode;
 import com.tcoded.folialib.FoliaLib;
 import com.tcoded.lightlibs.updatechecker.SimpleUpdateChecker;
-import com.tcoded.nochatreports.plugin.listener.ChatPacketListener;
 import com.tcoded.nochatreports.nms.NmsProvider;
+import com.tcoded.nochatreports.plugin.listener.ChatListener;
+import com.tcoded.nochatreports.plugin.listener.JoinListener;
 import com.tcoded.nochatreports.plugin.listener.KickListener;
 import com.tcoded.nochatreports.plugin.util.PluginUtil;
 import com.tcoded.nochatreports.plugin.util.SimpleLogFilter;
-import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.HandlerList;
@@ -61,8 +57,8 @@ public final class NoChatReports extends JavaPlugin {
             return true;
         });
 
-        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
-        PacketEvents.getAPI().load();
+//        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
+//        PacketEvents.getAPI().load();
 
         // --- Check if we need to handle intentional misbehavior ---
         PluginManager pluginManager = this.getServer().getPluginManager();
@@ -117,13 +113,27 @@ public final class NoChatReports extends JavaPlugin {
         getLogger().info("Loading support for Minecraft version: " + mcVersion);
         this.nmsProvider = NmsProvider.getNmsProvider(mcVersion, this.foliaLib.isFolia() || this.foliaLib.isPaper());
 
-        PacketEventsAPI<?> api = PacketEvents.getAPI();
-        api.getSettings().debug(false).bStats(false).checkForUpdates(false).timeStampMode(TimeStampMode.MILLIS).reEncodeByDefault(true);
-        api.init();
+        if (this.nmsProvider == null) {
+            getLogger().severe("Failed to load NMS provider for Minecraft version: " + mcVersion);
+            this.getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
+//        PacketEventsAPI<?> api = PacketEvents.getAPI();
+//        api.getSettings().debug(false).bStats(false).checkForUpdates(false).timeStampMode(TimeStampMode.MILLIS).reEncodeByDefault(true);
+//        api.init();
+
+//        api.getEventManager().registerListener(new ChatPacketListener(this), PacketListenerPriority.NORMAL);
+        // Packet Listeners
+        NmsProvider<?> nms = this.getNmsProvider();
+        nms.getChannelInjector().injectAll(this.getServer().getOnlinePlayers());
+        nms.registerListeners();
 
         // Listeners
-        api.getEventManager().registerListener(new ChatPacketListener(this), PacketListenerPriority.NORMAL);
-        this.getServer().getPluginManager().registerEvents(new KickListener(
+        PluginManager pluginManager = this.getServer().getPluginManager();
+        pluginManager.registerEvents(new JoinListener(this, nms.getChannelInjector()), this);
+        pluginManager.registerEvents(new ChatListener(this), this);
+        pluginManager.registerEvents(new KickListener(
                 this.getConfig().getString("prevented-kick-message"),
                 this.getConfig().getStringList("invalid-kick-reasons")
         ), this);
@@ -135,7 +145,8 @@ public final class NoChatReports extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        PacketEvents.getAPI().terminate();
+//        PacketEvents.getAPI().terminate();
+        this.nmsProvider.getChannelInjector().uninjectAll(this.getServer().getOnlinePlayers());
         HandlerList.unregisterAll(this);
     }
 

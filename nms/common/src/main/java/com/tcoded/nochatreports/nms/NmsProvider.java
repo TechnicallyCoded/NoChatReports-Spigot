@@ -1,5 +1,7 @@
 package com.tcoded.nochatreports.nms;
 
+import com.tcoded.nochatreports.nms.channel.ChannelInjector;
+import com.tcoded.nochatreports.nms.channel.GlobalPacketHandler;
 import com.tcoded.nochatreports.nms.wrapper.PlayerChatPacket;
 import com.tcoded.nochatreports.nms.wrapper.SystemChatPacket;
 import io.netty.buffer.ByteBuf;
@@ -30,5 +32,18 @@ public abstract class NmsProvider<T> {
     public abstract void sendSystemPacket(Player player, SystemChatPacket systemPacket);
 
     public abstract T getNmsPlayer(Player player);
+
+    public abstract GlobalPacketHandler getGlobalPacketHandler();
+
+    public abstract ChannelInjector getChannelInjector();
+
+    public abstract void registerListeners();
+
+    /**
+     * Wrap NMS packet object to PlayerChatPacket object
+     * @param packet NMS packet object (ClientboundPlayerChatPacket, for example)
+     * @return PlayerChatPacket object
+     */
+    public abstract PlayerChatPacket wrapChatPacket(Object packet);
 
 }

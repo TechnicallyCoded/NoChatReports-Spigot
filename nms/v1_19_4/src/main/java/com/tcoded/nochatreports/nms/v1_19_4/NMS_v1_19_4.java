@@ -1,12 +1,19 @@
 package com.tcoded.nochatreports.nms.v1_19_4;
 
 import com.tcoded.nochatreports.nms.NmsProvider;
+import com.tcoded.nochatreports.nms.channel.ChannelInjector;
+import com.tcoded.nochatreports.nms.channel.GlobalPacketHandler;
+import com.tcoded.nochatreports.nms.v1_19_4.channel.ChannelInjectorImpl;
+import com.tcoded.nochatreports.nms.v1_19_4.channel.GlobalPacketHandlerImpl;
+import com.tcoded.nochatreports.nms.v1_19_4.listener.ClientboundPlayerChatListener;
+import com.tcoded.nochatreports.nms.v1_19_4.wrapper.PlayerChatPacketImpl;
 import com.tcoded.nochatreports.nms.wrapper.PlayerChatPacket;
 import com.tcoded.nochatreports.nms.wrapper.SystemChatPacket;
 import io.netty.buffer.ByteBuf;
 import joptsimple.OptionSet;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundPlayerChatPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.dedicated.DedicatedServerProperties;
@@ -21,6 +28,8 @@ import java.util.Properties;
 public class NMS_v1_19_4 extends NmsProvider<ServerPlayer> {
 
     private final boolean isPaper;
+    private final GlobalPacketHandler globalPacketHandler;
+    private final ChannelInjector channelInjector;
 
     public NMS_v1_19_4(boolean isPaper) {
         this.isPaper = isPaper;
@@ -45,6 +54,9 @@ public class NMS_v1_19_4 extends NmsProvider<ServerPlayer> {
                 throw new RuntimeException(e);
             }
         });
+
+        this.globalPacketHandler = new GlobalPacketHandlerImpl(this);
+        this.channelInjector = new ChannelInjectorImpl(globalPacketHandler);
     }
 
     @Override
@@ -64,6 +76,29 @@ public class NMS_v1_19_4 extends NmsProvider<ServerPlayer> {
     public ServerPlayer getNmsPlayer(Player player) {
         CraftPlayer craftPlayer = (CraftPlayer) player;
         return craftPlayer.getHandle();
+    }
+
+    @Override
+    public GlobalPacketHandler getGlobalPacketHandler() {
+        return globalPacketHandler;
+    }
+
+    @Override
+    public ChannelInjector getChannelInjector() {
+        return channelInjector;
+    }
+
+    public void registerListeners() {
+        this.getGlobalPacketHandler().addListener(new ClientboundPlayerChatListener(this));
+    }
+
+    @Override
+    public PlayerChatPacket wrapChatPacket(Object packet) {
+        if (packet instanceof ClientboundPlayerChatPacket chatPacket) {
+            return new PlayerChatPacketImpl(chatPacket);
+        }
+
+        return null;
     }
 
 }

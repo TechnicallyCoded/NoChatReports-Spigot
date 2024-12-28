@@ -1,5 +1,5 @@
 dependencies {
-    // https://mvnrepository.com/artifact/io.netty/netty-buffer
+    // https://mvnrepository.com/artifact/io.netty/netty-all
+    compileOnly 'io.netty:netty-all:4.1.116.Final'
     compileOnly "org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT"
-    compileOnly group: 'io.netty', name: 'netty-buffer', version: '4.1.108.Final'
 }
