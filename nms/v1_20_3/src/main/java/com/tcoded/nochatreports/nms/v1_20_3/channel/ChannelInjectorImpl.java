@@ -4,6 +4,7 @@ import com.tcoded.nochatreports.nms.NmsProvider;
 import com.tcoded.nochatreports.nms.channel.AbstractChannelInjector;
 import com.tcoded.nochatreports.nms.channel.GlobalPacketHandler;
 import com.tcoded.nochatreports.nms.types.MIMList;
+import com.tcoded.nochatreports.nms.types.MIMQueue;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import net.minecraft.network.Connection;
@@ -17,8 +18,14 @@ import org.bukkit.entity.Player;
 import java.lang.reflect.Field;
 import java.lang.reflect.InaccessibleObjectException;
 import java.util.List;
+import java.util.Queue;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.logging.Logger;
 
 public class ChannelInjectorImpl extends AbstractChannelInjector {
+
+    private static final Logger logger = Logger.getLogger("NCR Channel Injector");
 
     private final NmsProvider<ServerPlayer> nms;
 
@@ -38,37 +45,68 @@ public class ChannelInjectorImpl extends AbstractChannelInjector {
             throw new RuntimeException(e);
         }
 
-        ServerConnectionListener serverConnectionHandler = MinecraftServer.getServer().getConnection();
-        List<Connection> connectionsList = serverConnectionHandler.getConnections();
+        ServerConnectionListener srvConnHandler = MinecraftServer.getServer().getConnection();
+        List<Connection> connList = srvConnHandler.getConnections();
 
-        Class<? extends ServerConnectionListener> serverConnectionClass = serverConnectionHandler.getClass();
-        for (Field field : serverConnectionClass.getFields()) {
+        Class<? extends ServerConnectionListener> serverConnectionClass = srvConnHandler.getClass();
+        boolean unlockPaperQueue = false;
+        for (Field field : serverConnectionClass.getDeclaredFields()) {
             try {
-                if (field.get(serverConnectionHandler) != connectionsList) continue;
+                if (field.getType().isAssignableFrom(List.class)) {
+                    if (!isIdentityEq(field, srvConnHandler, connList)) this.applyMimList(field, srvConnHandler, this::handleNewChannel, this::handleRemoveChannel); // 1st list
+                    else this.applyMimList(field, srvConnHandler, this::handleNewConnection, this::handleRemoveConnection); // 2nd list
+                    unlockPaperQueue = true; // Paper's "pending" Queue should come right after
+                }
+                if (unlockPaperQueue && field.getType().isAssignableFrom(Queue.class)) {
+                    this.applyMimQueue(field, srvConnHandler); // 3rd "list" (actually a queue)
+                    unlockPaperQueue = false; // Lock it again
+                }
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
 
-            this.mimList(field, serverConnectionHandler, connectionsList);
         }
 
-        for (Connection conn : serverConnectionHandler.getConnections()) {
+        for (Connection conn : srvConnHandler.getConnections()) {
             setPacketHandler(conn, false);
         }
     }
 
-    private void mimList(Field field, ServerConnectionListener serverConnectionHandler, List<Connection> connectionsList) {
+    private static boolean isIdentityEq(Field field, ServerConnectionListener serverConnectionHandler, List<Connection> connectionsList) throws IllegalAccessException {
+        field.setAccessible(true);
+        return field.get(serverConnectionHandler) == connectionsList;
+    }
+
+    private <T> void applyMimList(Field field, ServerConnectionListener handler, Function<T, T> interceptor, Consumer<T> cleanup) {
         try {
             field.setAccessible(true);
-            field.set(serverConnectionHandler, new MIMList<Connection>(connectionsList, this::autoAdd, this::unsetPacketHandler));
+            // noinspection unchecked
+            List<T> objectList = (List<T>) field.get(handler);
+            field.set(handler, new MIMList<>(objectList, interceptor, cleanup));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private Connection autoAdd(Connection connection) {
-        setPacketHandler(connection, false);
+    private void applyMimQueue(Field field, ServerConnectionListener handler) {
+        try {
+            field.setAccessible(true);
+            // noinspection unchecked
+            Queue<Connection> pendingQueue = (Queue<Connection>) field.get(handler);
+            field.set(handler, new MIMQueue<>(pendingQueue, this::handleNewConnection, this::handleRemoveConnection));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Connection handleNewConnection(Connection connection) {
+        handleNewChannel(connection.channel);
         return connection;
+    }
+
+    private Channel handleNewChannel(Channel channel) {
+        setPacketHandler(channel, false);
+        return channel;
     }
 
     public void inject(Player player) {
@@ -85,6 +123,10 @@ public class ChannelInjectorImpl extends AbstractChannelInjector {
     }
 
     private void setPacketHandler(Channel channel, boolean replace) {
+        if (channel == null) {
+            logger.warning("setPacketHandler failed: channel is null");
+            return;
+        }
         channel.eventLoop().submit(() -> {
             ChannelPipeline pipeline = channel.pipeline();
 
@@ -103,13 +145,16 @@ public class ChannelInjectorImpl extends AbstractChannelInjector {
         ServerGamePacketListenerImpl listener = this.nms.getNmsPlayer(player).connection;
 
         Connection connection = getConnection(listener);
-        unsetPacketHandler(connection);
+        handleRemoveConnection(connection);
 
         this.unmapPlayerChannel(connection.channel.remoteAddress());
     }
 
-    private void unsetPacketHandler(Connection connection) {
-        Channel channel = connection.channel;
+    private void handleRemoveConnection(Connection connection) {
+        this.handleRemoveChannel(connection.channel);
+    }
+
+    private void handleRemoveChannel(Channel channel) {
         channel.eventLoop().submit(() -> {
             channel.pipeline().remove(HANDLER_NAME);
         });

@@ -9,9 +9,7 @@ import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundPlayerChatPacket;
 import net.minecraft.network.protocol.game.ClientboundSystemChatPacket;
-import net.minecraft.server.dedicated.DedicatedServer;
-import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_20_R3.CraftServer;
+import net.minecraft.server.MinecraftServer;
 
 import java.util.Optional;
 
@@ -30,9 +28,7 @@ public class PlayerChatPacketImpl implements PlayerChatPacket {
     public SystemChatPacket toSystem() {
         try {
             // Resolve the chat type
-            DedicatedServer nmsServer = ((CraftServer) Bukkit.getServer()).getServer();
-
-            RegistryAccess.Frozen registryAccess = nmsServer.registryAccess();
+            RegistryAccess.Frozen registryAccess = MinecraftServer.getServer().registryAccess();
             Optional<ChatType.Bound> chatType = packet.chatType().resolve(registryAccess);
 
             // Get the content of the message
