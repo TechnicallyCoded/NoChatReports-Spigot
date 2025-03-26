@@ -155,6 +155,11 @@ public class ChannelInjectorImpl extends AbstractChannelInjector {
     }
 
     private void handleRemoveChannel(Channel channel) {
+        if (channel == null) {
+            logger.warning("handleRemoveChannel channel is null");
+            return;
+        }
+
         channel.eventLoop().submit(() -> {
             channel.pipeline().remove(HANDLER_NAME);
         });
