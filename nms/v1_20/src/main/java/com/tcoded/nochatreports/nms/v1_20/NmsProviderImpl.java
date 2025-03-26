@@ -7,6 +7,7 @@ import com.tcoded.nochatreports.nms.v1_20.channel.ChannelInjectorImpl;
 import com.tcoded.nochatreports.nms.v1_20.channel.GlobalPacketHandlerImpl;
 import com.tcoded.nochatreports.nms.v1_20.listener.ClientboundPlayerChatListener;
 import com.tcoded.nochatreports.nms.v1_20.listener.ClientboundServerStatusListener;
+import com.tcoded.nochatreports.nms.v1_20.listener.ServerboundChatSessionUpdateListener;
 import com.tcoded.nochatreports.nms.v1_20.wrapper.PlayerChatPacketImpl;
 import com.tcoded.nochatreports.nms.wrapper.PlayerChatPacket;
 import com.tcoded.nochatreports.nms.wrapper.SystemChatPacket;
@@ -57,7 +58,7 @@ public class NmsProviderImpl extends NmsProvider<ServerPlayer> {
         });
 
         this.globalPacketHandler = new GlobalPacketHandlerImpl(this);
-        this.channelInjector = new ChannelInjectorImpl(globalPacketHandler);
+        this.channelInjector = new ChannelInjectorImpl(this, globalPacketHandler);
     }
 
     @Override
@@ -92,6 +93,7 @@ public class NmsProviderImpl extends NmsProvider<ServerPlayer> {
     public void registerListeners() {
         this.getGlobalPacketHandler().addListener(new ClientboundPlayerChatListener(this));
         this.getGlobalPacketHandler().addListener(new ClientboundServerStatusListener(this));
+        this.getGlobalPacketHandler().addListener(new ServerboundChatSessionUpdateListener(this));
     }
 
     @Override
