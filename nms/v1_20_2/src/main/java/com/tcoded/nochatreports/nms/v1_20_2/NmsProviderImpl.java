@@ -7,18 +7,23 @@ import com.tcoded.nochatreports.nms.v1_20_2.channel.ChannelInjectorImpl;
 import com.tcoded.nochatreports.nms.v1_20_2.channel.GlobalPacketHandlerImpl;
 import com.tcoded.nochatreports.nms.v1_20_2.listener.ClientboundPlayerChatListener;
 import com.tcoded.nochatreports.nms.v1_20_2.listener.ClientboundServerStatusListener;
+import com.tcoded.nochatreports.nms.v1_20_2.listener.ServerboundChatSessionUpdateListener;
 import com.tcoded.nochatreports.nms.v1_20_2.wrapper.PlayerChatPacketImpl;
 import com.tcoded.nochatreports.nms.wrapper.PlayerChatPacket;
 import com.tcoded.nochatreports.nms.wrapper.SystemChatPacket;
 import io.netty.buffer.ByteBuf;
+import joptsimple.OptionSet;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundPlayerChatPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
+import net.minecraft.server.dedicated.DedicatedServerProperties;
 import net.minecraft.server.level.ServerPlayer;
 import org.bukkit.craftbukkit.v1_20_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
+import java.lang.reflect.Method;
 import java.util.Properties;
 
 @SuppressWarnings("unused")
@@ -35,11 +40,27 @@ public class NmsProviderImpl extends NmsProvider<ServerPlayer> {
         server.settings.update((config) -> {
             final Properties newProps = new Properties(config.properties);
             newProps.setProperty("enforce-secure-profile", String.valueOf(false));
-            return config.reload(server.registryAccess(), newProps, server.options);
+
+            if (isPaper) {
+                return config.reload(server.registryAccess(), newProps, server.options);
+            } else {
+                try {
+                    Method reloadMethod = config.getClass().getDeclaredMethod("reload", RegistryAccess.class, Properties.class, OptionSet.class);
+                    boolean prevAccessible = reloadMethod.isAccessible();
+                    reloadMethod.setAccessible(true);
+                    Object retValue = reloadMethod.invoke(config, server.registryAccess(), newProps, server.options);
+                    reloadMethod.setAccessible(prevAccessible);
+                    return (DedicatedServerProperties) retValue;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
         });
 
         this.globalPacketHandler = new GlobalPacketHandlerImpl(this);
-        this.channelInjector = new ChannelInjectorImpl(globalPacketHandler);
+        this.channelInjector = new ChannelInjectorImpl(this, globalPacketHandler);
     }
 
     @Override
@@ -75,6 +96,7 @@ public class NmsProviderImpl extends NmsProvider<ServerPlayer> {
     public void registerListeners() {
         this.getGlobalPacketHandler().addListener(new ClientboundPlayerChatListener(this));
         this.getGlobalPacketHandler().addListener(new ClientboundServerStatusListener(this));
+        this.getGlobalPacketHandler().addListener(new ServerboundChatSessionUpdateListener(this));
     }
 
     @Override
