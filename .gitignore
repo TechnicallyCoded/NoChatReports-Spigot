@@ -115,3 +115,4 @@ notepad.txt
 PluginPoliceFilter.java
 .gradle/
 build/
+*.ignore
