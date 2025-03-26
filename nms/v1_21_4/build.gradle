@@ -1,9 +1,9 @@
 plugins {
-    id 'io.papermc.paperweight.userdev' version '1.7.1'
+    id 'io.papermc.paperweight.userdev' version '2.0.0-beta.16'
 }
 
 dependencies {
-    paperweight.devBundle("io.papermc.paper" ,"1.21.4-R0.1-20241211.212446-17")
+    paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
     compileOnly project(":nms:common")
 }
 

@@ -1,12 +1,13 @@
-package com.tcoded.nochatreports.nms.v1_21;
+package com.tcoded.nochatreports.nms.v1_20_2;
 
 import com.tcoded.nochatreports.nms.NmsProvider;
 import com.tcoded.nochatreports.nms.channel.ChannelInjector;
 import com.tcoded.nochatreports.nms.channel.GlobalPacketHandler;
-import com.tcoded.nochatreports.nms.v1_21.channel.ChannelInjectorImpl;
-import com.tcoded.nochatreports.nms.v1_21.channel.GlobalPacketHandlerImpl;
-import com.tcoded.nochatreports.nms.v1_21.listener.ClientboundPlayerChatListener;
-import com.tcoded.nochatreports.nms.v1_21.wrapper.PlayerChatPacketImpl;
+import com.tcoded.nochatreports.nms.v1_20_2.channel.ChannelInjectorImpl;
+import com.tcoded.nochatreports.nms.v1_20_2.channel.GlobalPacketHandlerImpl;
+import com.tcoded.nochatreports.nms.v1_20_2.listener.ClientboundPlayerChatListener;
+import com.tcoded.nochatreports.nms.v1_20_2.listener.ClientboundServerStatusListener;
+import com.tcoded.nochatreports.nms.v1_20_2.wrapper.PlayerChatPacketImpl;
 import com.tcoded.nochatreports.nms.wrapper.PlayerChatPacket;
 import com.tcoded.nochatreports.nms.wrapper.SystemChatPacket;
 import io.netty.buffer.ByteBuf;
@@ -15,19 +16,19 @@ import net.minecraft.network.protocol.game.ClientboundPlayerChatPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.level.ServerPlayer;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.Properties;
 
 @SuppressWarnings("unused")
-public class NMS_v1_21 extends NmsProvider<ServerPlayer> {
+public class NmsProviderImpl extends NmsProvider<ServerPlayer> {
 
     private final boolean isPaper;
     private final GlobalPacketHandler globalPacketHandler;
     private final ChannelInjector channelInjector;
 
-    public NMS_v1_21(boolean isPaper) {
+    public NmsProviderImpl(boolean isPaper) {
         this.isPaper = isPaper;
 
         DedicatedServer server = (DedicatedServer) MinecraftServer.getServer();
@@ -51,7 +52,7 @@ public class NMS_v1_21 extends NmsProvider<ServerPlayer> {
         ServerPlayer nmsPlayer = getNmsPlayer(player);
         Packet<?> nmsPacket = (Packet<?>) systemPacket.toNmsPacket();
 
-        nmsPlayer.connection.sendPacket(nmsPacket);
+        nmsPlayer.connection.send(nmsPacket);
     }
 
     @Override
@@ -73,6 +74,7 @@ public class NMS_v1_21 extends NmsProvider<ServerPlayer> {
 
     public void registerListeners() {
         this.getGlobalPacketHandler().addListener(new ClientboundPlayerChatListener(this));
+        this.getGlobalPacketHandler().addListener(new ClientboundServerStatusListener(this));
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.tcoded.nochatreports.nms.channel.GlobalPacketHandler;
 import com.tcoded.nochatreports.nms.v1_19_4.channel.ChannelInjectorImpl;
 import com.tcoded.nochatreports.nms.v1_19_4.channel.GlobalPacketHandlerImpl;
 import com.tcoded.nochatreports.nms.v1_19_4.listener.ClientboundPlayerChatListener;
+import com.tcoded.nochatreports.nms.v1_19_4.listener.ClientboundServerStatusListener;
 import com.tcoded.nochatreports.nms.v1_19_4.wrapper.PlayerChatPacketImpl;
 import com.tcoded.nochatreports.nms.wrapper.PlayerChatPacket;
 import com.tcoded.nochatreports.nms.wrapper.SystemChatPacket;
@@ -25,13 +26,13 @@ import java.lang.reflect.Method;
 import java.util.Properties;
 
 @SuppressWarnings("unused")
-public class NMS_v1_19_4 extends NmsProvider<ServerPlayer> {
+public class NmsProviderImpl extends NmsProvider<ServerPlayer> {
 
     private final boolean isPaper;
     private final GlobalPacketHandler globalPacketHandler;
     private final ChannelInjector channelInjector;
 
-    public NMS_v1_19_4(boolean isPaper) {
+    public NmsProviderImpl(boolean isPaper) {
         this.isPaper = isPaper;
 
         DedicatedServer server = (DedicatedServer) MinecraftServer.getServer();
@@ -90,6 +91,7 @@ public class NMS_v1_19_4 extends NmsProvider<ServerPlayer> {
 
     public void registerListeners() {
         this.getGlobalPacketHandler().addListener(new ClientboundPlayerChatListener(this));
+        this.getGlobalPacketHandler().addListener(new ClientboundServerStatusListener(this));
     }
 
     @Override

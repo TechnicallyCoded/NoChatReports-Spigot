@@ -2,6 +2,7 @@ package com.tcoded.nochatreports.nms.channel;
 
 import com.tcoded.nochatreports.nms.NmsProvider;
 import com.tcoded.nochatreports.nms.listener.PacketListener;
+import com.tcoded.nochatreports.nms.types.PacketWriteResult;
 import io.netty.channel.Channel;
 import org.bukkit.entity.Player;
 
@@ -22,17 +23,18 @@ public class GlobalPacketHandler {
         this.listeners = new ConcurrentHashMap<>();
     }
 
-    protected boolean handleAnyPacket(Channel channel, Object packet) {
+    protected PacketWriteResult<?> handleAnyPacket(Channel channel, Object packet) {
         Player player = this.nms.getChannelInjector().getPlayer(channel);
         List<PacketListener<?>> listenersForType = this.listeners.getOrDefault(packet.getClass(), EMPTY_LISTENER_LIST);
 
+        PacketWriteResult<?> result = new PacketWriteResult<>(true, packet);
         for (PacketListener<?> listener : listenersForType) {
             if (listener.getPacketClass().isAssignableFrom(packet.getClass())) {
-                if (!listener.onPacketSendInternal(player, packet)) return false;
+                result = listener.onPacketSendInternal(player, result.packet());
             }
         }
 
-        return true;
+        return result;
     }
 
     public void addListener(PacketListener<?> packetListener) {

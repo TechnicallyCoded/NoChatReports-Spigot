@@ -15,7 +15,7 @@ public abstract class NmsProvider<T> {
         try {
             String versionName = NmsVersion.getNmsVersion(minecraftVersion).name();
             Class<?> providerName = Class.forName(
-                    NmsProvider.class.getPackageName() + "." + versionName + ".NMS_" + versionName
+                    NmsProvider.class.getPackageName() + "." + versionName + ".NmsProviderImpl"
             );
             Constructor<?> constructor = providerName.getConstructor(boolean.class);
 

@@ -1,6 +1,7 @@
 package com.tcoded.nochatreports.nms.v1_20_3.channel;
 
 import com.tcoded.nochatreports.nms.channel.GlobalPacketHandler;
+import com.tcoded.nochatreports.nms.types.PacketWriteResult;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
@@ -16,12 +17,13 @@ public class ChannelPacketHandler extends ChannelDuplexHandler {
     @Override
     public void write(ChannelHandlerContext ctx, Object packet, ChannelPromise promise) throws Exception {
         // Cancel the packet?
-        if (!globalPacketHandler.write(ctx, packet, promise)) {
+        PacketWriteResult<?> result = globalPacketHandler.write(ctx, packet, promise);
+        if (!result.keep()) {
             return;
         }
 
         // Else, write the packet
-        super.write(ctx, packet, promise);
+        super.write(ctx, result.packet(), promise);
     }
 
 }

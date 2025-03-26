@@ -1,5 +1,6 @@
 package com.tcoded.nochatreports.nms.listener;
 
+import com.tcoded.nochatreports.nms.types.PacketWriteResult;
 import org.bukkit.entity.Player;
 
 public interface PacketListener <T> {
@@ -10,7 +11,7 @@ public interface PacketListener <T> {
      * @param packet The packet
      * @return true to keep the packet, false to cancel it
      */
-    boolean onPacketSend(Player player, T packet);
+    PacketWriteResult<T> onPacketSend(Player player, T packet);
 
     /**
      * Get the class of the packet this listener listens to.
@@ -23,7 +24,7 @@ public interface PacketListener <T> {
      * @param packet The packet
      * @return true to keep the packet, false to cancel it
      */
-    default boolean onPacketSendInternal(Player player, Object packet) {
+    default PacketWriteResult<T> onPacketSendInternal(Player player, Object packet) {
         // noinspection unchecked
         return onPacketSend(player, (T) packet);
     }

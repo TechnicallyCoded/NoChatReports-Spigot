@@ -1,25 +1,26 @@
 package com.tcoded.nochatreports.nms.v1_21_3.listener;
 
+import com.tcoded.nochatreports.nms.NmsProvider;
 import com.tcoded.nochatreports.nms.PlayerChatPacketEvent;
 import com.tcoded.nochatreports.nms.listener.PacketListener;
-import com.tcoded.nochatreports.nms.v1_21_3.NMS_v1_21_3;
+import com.tcoded.nochatreports.nms.types.PacketWriteResult;
 import net.minecraft.network.protocol.game.ClientboundPlayerChatPacket;
 import org.bukkit.entity.Player;
 
 public class ClientboundPlayerChatListener implements PacketListener<ClientboundPlayerChatPacket> {
 
-    private final NMS_v1_21_3 nms;
+    private final NmsProvider<?> nms;
 
-    public ClientboundPlayerChatListener(NMS_v1_21_3 plugin) {
+    public ClientboundPlayerChatListener(NmsProvider<?> plugin) {
         this.nms = plugin;
     }
 
     @Override
-    public boolean onPacketSend(Player player, ClientboundPlayerChatPacket packet) {
+    public PacketWriteResult<ClientboundPlayerChatPacket> onPacketSend(Player player, ClientboundPlayerChatPacket packet) {
         PlayerChatPacketEvent event = new PlayerChatPacketEvent(player, this.nms.wrapChatPacket(packet));
         event.callEvent();
 
-        return !event.isCancelled();
+        return new PacketWriteResult<>(!event.isCancelled(), packet);
     }
 
     @Override

@@ -1,12 +1,13 @@
-package com.tcoded.nochatreports.nms.v1_20_4;
+package com.tcoded.nochatreports.nms.v1_20_3;
 
 import com.tcoded.nochatreports.nms.NmsProvider;
 import com.tcoded.nochatreports.nms.channel.ChannelInjector;
 import com.tcoded.nochatreports.nms.channel.GlobalPacketHandler;
-import com.tcoded.nochatreports.nms.v1_20_4.channel.ChannelInjectorImpl;
-import com.tcoded.nochatreports.nms.v1_20_4.channel.GlobalPacketHandlerImpl;
-import com.tcoded.nochatreports.nms.v1_20_4.listener.ClientboundPlayerChatListener;
-import com.tcoded.nochatreports.nms.v1_20_4.wrapper.PlayerChatPacketImpl;
+import com.tcoded.nochatreports.nms.v1_20_3.channel.ChannelInjectorImpl;
+import com.tcoded.nochatreports.nms.v1_20_3.channel.GlobalPacketHandlerImpl;
+import com.tcoded.nochatreports.nms.v1_20_3.listener.ClientboundPlayerChatListener;
+import com.tcoded.nochatreports.nms.v1_20_3.listener.ClientboundServerStatusListener;
+import com.tcoded.nochatreports.nms.v1_20_3.wrapper.PlayerChatPacketImpl;
 import com.tcoded.nochatreports.nms.wrapper.PlayerChatPacket;
 import com.tcoded.nochatreports.nms.wrapper.SystemChatPacket;
 import io.netty.buffer.ByteBuf;
@@ -21,13 +22,13 @@ import org.bukkit.entity.Player;
 import java.util.Properties;
 
 @SuppressWarnings("unused")
-public class NMS_v1_20_4 extends NmsProvider<ServerPlayer> {
+public class NmsProviderImpl extends NmsProvider<ServerPlayer> {
 
     private final boolean isPaper;
     private final GlobalPacketHandler globalPacketHandler;
     private final ChannelInjector channelInjector;
 
-    public NMS_v1_20_4(boolean isPaper) {
+    public NmsProviderImpl(boolean isPaper) {
         this.isPaper = isPaper;
 
         DedicatedServer server = (DedicatedServer) MinecraftServer.getServer();
@@ -38,7 +39,7 @@ public class NMS_v1_20_4 extends NmsProvider<ServerPlayer> {
         });
 
         this.globalPacketHandler = new GlobalPacketHandlerImpl(this);
-        this.channelInjector = new ChannelInjectorImpl(globalPacketHandler);
+        this.channelInjector = new ChannelInjectorImpl(this, globalPacketHandler);
     }
 
     @Override
@@ -73,6 +74,7 @@ public class NMS_v1_20_4 extends NmsProvider<ServerPlayer> {
 
     public void registerListeners() {
         this.getGlobalPacketHandler().addListener(new ClientboundPlayerChatListener(this));
+        this.getGlobalPacketHandler().addListener(new ClientboundServerStatusListener(this));
     }
 
     @Override

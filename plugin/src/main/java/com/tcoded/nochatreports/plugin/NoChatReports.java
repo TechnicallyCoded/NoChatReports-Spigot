@@ -3,7 +3,7 @@ package com.tcoded.nochatreports.plugin;
 import com.tcoded.folialib.FoliaLib;
 import com.tcoded.lightlibs.updatechecker.SimpleUpdateChecker;
 import com.tcoded.nochatreports.nms.NmsProvider;
-import com.tcoded.nochatreports.plugin.listener.ChatListener;
+import com.tcoded.nochatreports.plugin.listener.PacketListener;
 import com.tcoded.nochatreports.plugin.listener.JoinListener;
 import com.tcoded.nochatreports.plugin.listener.KickListener;
 import com.tcoded.nochatreports.plugin.util.PluginUtil;
@@ -132,7 +132,7 @@ public final class NoChatReports extends JavaPlugin {
         // Listeners
         PluginManager pluginManager = this.getServer().getPluginManager();
         pluginManager.registerEvents(new JoinListener(this, nms.getChannelInjector()), this);
-        pluginManager.registerEvents(new ChatListener(this), this);
+        pluginManager.registerEvents(new PacketListener(this), this);
         pluginManager.registerEvents(new KickListener(
                 this.getConfig().getString("prevented-kick-message"),
                 this.getConfig().getStringList("invalid-kick-reasons")

@@ -1,60 +1,41 @@
-package com.tcoded.nochatreports.nms.v1_21_4;
+package com.tcoded.nochatreports.nms.v1_20_6;
 
 import com.tcoded.nochatreports.nms.NmsProvider;
 import com.tcoded.nochatreports.nms.channel.ChannelInjector;
 import com.tcoded.nochatreports.nms.channel.GlobalPacketHandler;
-import com.tcoded.nochatreports.nms.v1_21_4.channel.ChannelInjectorImpl;
-import com.tcoded.nochatreports.nms.v1_21_4.channel.GlobalPacketHandlerImpl;
-import com.tcoded.nochatreports.nms.v1_21_4.listener.ClientboundPlayerChatListener;
-import com.tcoded.nochatreports.nms.v1_21_4.wrapper.PlayerChatPacketImpl;
+import com.tcoded.nochatreports.nms.v1_20_6.channel.ChannelInjectorImpl;
+import com.tcoded.nochatreports.nms.v1_20_6.channel.GlobalPacketHandlerImpl;
+import com.tcoded.nochatreports.nms.v1_20_6.listener.ClientboundPlayerChatListener;
+import com.tcoded.nochatreports.nms.v1_20_6.listener.ClientboundServerStatusListener;
+import com.tcoded.nochatreports.nms.v1_20_6.wrapper.PlayerChatPacketImpl;
 import com.tcoded.nochatreports.nms.wrapper.PlayerChatPacket;
 import com.tcoded.nochatreports.nms.wrapper.SystemChatPacket;
 import io.netty.buffer.ByteBuf;
-import joptsimple.OptionSet;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundPlayerChatPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
-import net.minecraft.server.dedicated.DedicatedServerProperties;
 import net.minecraft.server.level.ServerPlayer;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.Method;
 import java.util.Properties;
 
 @SuppressWarnings("unused")
-public class NMS_v1_21_4 extends NmsProvider<ServerPlayer> {
+public class NmsProviderImpl extends NmsProvider<ServerPlayer> {
 
     private final boolean isPaper;
     private final GlobalPacketHandler globalPacketHandler;
     private final ChannelInjector channelInjector;
 
-    public NMS_v1_21_4(boolean isPaper) {
+    public NmsProviderImpl(boolean isPaper) {
         this.isPaper = isPaper;
 
         DedicatedServer server = (DedicatedServer) MinecraftServer.getServer();
         server.settings.update((config) -> {
             final Properties newProps = new Properties(config.properties);
             newProps.setProperty("enforce-secure-profile", String.valueOf(false));
-
-            if (isPaper) {
-                return config.reload(server.registryAccess(), newProps, server.options);
-            } else {
-                try {
-                    Method reloadMethod = config.getClass().getDeclaredMethod("reload", RegistryAccess.class, Properties.class, OptionSet.class);
-                    boolean prevAccessible = reloadMethod.isAccessible();
-                    reloadMethod.setAccessible(true);
-                    Object retValue = reloadMethod.invoke(config, server.registryAccess(), newProps, server.options);
-                    reloadMethod.setAccessible(prevAccessible);
-                    return (DedicatedServerProperties) retValue;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            return null;
+            return config.reload(server.registryAccess(), newProps, server.options);
         });
 
         this.globalPacketHandler = new GlobalPacketHandlerImpl(this);
@@ -93,6 +74,7 @@ public class NMS_v1_21_4 extends NmsProvider<ServerPlayer> {
 
     public void registerListeners() {
         this.getGlobalPacketHandler().addListener(new ClientboundPlayerChatListener(this));
+        this.getGlobalPacketHandler().addListener(new ClientboundServerStatusListener(this));
     }
 
     @Override
