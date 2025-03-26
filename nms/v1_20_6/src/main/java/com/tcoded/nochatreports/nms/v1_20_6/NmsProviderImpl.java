@@ -1,4 +1,4 @@
-package com.tcoded.nochatreports.nms.v1_21;
+package com.tcoded.nochatreports.nms.v1_20_6;
 
 import com.tcoded.nochatreports.nms.NmsProvider;
 import com.tcoded.nochatreports.nms.channel.ChannelInjector;
