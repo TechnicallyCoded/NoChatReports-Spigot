@@ -14,13 +14,10 @@ public class ClientboundServerDataPacketListener implements PacketListener<Clien
 
     public ClientboundServerDataPacketListener(NmsProvider<?> plugin) {
         this.nms = plugin;
-        System.out.println("ClientboundServerMetadataListener.<init> -> " + ClientboundStatusResponsePacket.class.getName());
     }
 
     @Override
     public PacketWriteResult<ClientboundServerDataPacket> onPacketSend(Player player, ClientboundServerDataPacket packet) {
-        System.out.println("ClientboundServerMetadataListener.onPacketSend");
-
         SecureChatNotificationPacketEvent event = new SecureChatNotificationPacketEvent(packet.enforcesSecureChat());
         event.callEvent();
 
