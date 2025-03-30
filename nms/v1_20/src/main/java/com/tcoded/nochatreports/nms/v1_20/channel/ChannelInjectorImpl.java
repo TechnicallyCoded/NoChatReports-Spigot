@@ -153,6 +153,9 @@ public class ChannelInjectorImpl extends AbstractChannelInjector {
     }
 
     private void handleRemoveConnection(Connection connection) {
+        // This is definitely null sometimes
+        // noinspection ConstantValue
+        if (connection.channel == null) return;
         this.handleRemoveChannel(connection.channel);
     }
 
