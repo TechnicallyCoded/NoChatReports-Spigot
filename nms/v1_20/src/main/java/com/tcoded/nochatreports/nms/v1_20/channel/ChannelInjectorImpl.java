@@ -118,6 +118,9 @@ public class ChannelInjectorImpl extends AbstractChannelInjector {
     }
 
     private void setPacketHandler(Connection connection, boolean replace) {
+        // This is definitely null sometimes
+        // noinspection ConstantValue
+        if (connection.channel == null) return;
         setPacketHandler(connection.channel, replace);
     }
 
