@@ -82,6 +82,7 @@ dependencies {
     implementation project(path: ":nms:v1_21_1", configuration: "reobf")
     implementation project(path: ":nms:v1_21_3", configuration: "reobf")
     implementation project(path: ":nms:v1_21_4", configuration: "reobf")
+    implementation project(path: ":nms:v1_21_5", configuration: "reobf")
 
 //    implementation "com.github.retrooper:packetevents-spigot:2.7.0-SNAPSHOT"
 }
