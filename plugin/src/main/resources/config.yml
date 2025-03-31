@@ -1,13 +1,26 @@
 # --------------------------------------------
 # NoChatReports Configuration
 # --------------------------------------------
-#
-# The default configuration settings should be
-# fine for most servers. However, you may choose
-# to modify them to suit your needs.
+
+# THE DEFAULT CONFIGURATION SETTINGS SHOULD WORK
+# FINE FOR THE LARGE MAJORITY OF SERVERS.
+
+# The plugin is designed to be plug-and-play.
+# You likely do not need to change any settings.
+# However, you have the option to modify them in
+# order to suit your needs.
+
+# Note:
+# This plugin will not (and likely never will)
+# prevent players from having their skins and
+# usernames reported. It only blocks chat
+# reporting, as the name implies, and the
+# related popups.
 
 
+# --------------------------
 # -- Server Chat Settings --
+# --------------------------
 
 # Enable this to make the plugin modify chat
 # packets in order to remove chat signatures
@@ -17,7 +30,9 @@
 strip-server-chat-signatures: true
 
 
+# -----------------------------------
 # -- Other Server Related Settings --
+# -----------------------------------
 
 # A pop-up will be shown to players when they
 # join the server if this is set to false.
@@ -28,21 +43,10 @@ strip-server-chat-signatures: true
 hide-scary-popup: true
 
 
-# -- Client Chat Settings --
-
-# Enable this to make the plugin modify chat
-# packets in order to remove chat signatures
-# coming FROM the clients. This will act as if
-# the client never sent the signature in the
-# first place. - Mimics the behavior of the
-# Fabric mod "NoChatReports".
-# DO NOT ENABLE THIS IF YOU DON'T KNOW WHAT
-# YOU'RE DOING. NEWER MINECRAFT VERSIONS DO
-# NOT SUPPORT THIS FEATURE.
-strip-client-chat-signatures: false
-
-
+# -------------------------
 # -- Anti-kick settings. --
+# -------------------------
+
 # Works on PAPER ONLY.
 
 # This is the message that will be sent to the
@@ -66,26 +70,35 @@ invalid-kick-reasons:
 
 
 # -- Essentials/ViaVersion Settings --
-# Because we believe in user choice...
+# ------------------------------------
+
+# Reading below is likely a waste of your time, but I feel
+# as though it is important to provide the information if
+# you happen to want it.
+# You were warned :)
+
+# This setting exists because we believe in user choice...
 #
 # EssentialsX and ViaVersion are two plugins that are known to
 # complain about servers installing plugins similar to this one.
 # They will display a huge warning or error message in the console
 # purely based on detecting the name of plugins they dislike.
-# Please note that this is purely based on opinion and not due to
-# any true dangers about this plugin. Feel free to read the source
-# code and see for yourself...
+# Please note that this is purely based on opinions and not due to
+# any true dangers about this (or similar) plugins. Feel free to read
+# the source code and see for yourself...
 #
 # We've never had to blacklist a plugin or warn against its usage
 # since we feel like it's not our role as developers to moderate
 # the plugins that server owners want to use. If a plugin is
 # truly incompatible with ours, support channels are available to
-# resolve the issue, not just complain about it. If you agree with
-# this, please take the time to write a respectful yet unambiguous
-# review pressuring these 2 plugins to stop this unnecessary and
-# unwanted behavior. (Should their behavior change, this setting
-# will be removed.)
+# resolve the issue. Scary warnings are not the solution. If you
+# agree with this, please take the time to write a respectful yet
+# unambiguous review pressuring these 2 plugins to stop this
+# unnecessary and unwanted policing behavior. (Should their behavior
+# change, this setting will be removed.)
 #
-# Set to false is you want to see massive red spam "errors" in your
-# console.
+# Set to false if you want to see the massive warnings and "errors" in
+# your console about this issue. I assume that you don't care or have
+# time to deal with petty arguments, so I set it to true for you by
+# default. <3
 disable-plugin-policing: true
