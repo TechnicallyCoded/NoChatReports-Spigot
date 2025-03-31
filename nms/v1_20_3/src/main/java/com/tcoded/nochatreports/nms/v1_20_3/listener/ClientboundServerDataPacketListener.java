@@ -5,7 +5,6 @@ import com.tcoded.nochatreports.nms.event.SecureChatNotificationPacketEvent;
 import com.tcoded.nochatreports.nms.listener.PacketListener;
 import com.tcoded.nochatreports.nms.types.PacketWriteResult;
 import net.minecraft.network.protocol.game.ClientboundServerDataPacket;
-import net.minecraft.network.protocol.status.ClientboundStatusResponsePacket;
 import org.bukkit.entity.Player;
 
 public class ClientboundServerDataPacketListener implements PacketListener<ClientboundServerDataPacket> {
