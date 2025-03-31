@@ -69,6 +69,22 @@ invalid-kick-reasons:
   - OUT_OF_ORDER_CHAT
 
 
+# ----------------------
+# -- Plugin settings. --
+# ----------------------
+
+# Enable to increase logging information in the console
+# Useful for providing context to the developers
+debug-mode: false
+
+
+
+
+
+
+
+
+# ------------------------------------
 # -- Essentials/ViaVersion Settings --
 # ------------------------------------
 

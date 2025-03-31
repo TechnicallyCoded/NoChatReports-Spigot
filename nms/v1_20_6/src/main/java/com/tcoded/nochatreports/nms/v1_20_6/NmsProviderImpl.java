@@ -3,6 +3,7 @@ package com.tcoded.nochatreports.nms.v1_20_6;
 import com.tcoded.nochatreports.nms.NmsProvider;
 import com.tcoded.nochatreports.nms.channel.ChannelInjector;
 import com.tcoded.nochatreports.nms.channel.GlobalPacketHandler;
+import com.tcoded.nochatreports.nms.types.NmsProviderConfig;
 import com.tcoded.nochatreports.nms.v1_20_6.channel.ChannelInjectorImpl;
 import com.tcoded.nochatreports.nms.v1_20_6.channel.GlobalPacketHandlerImpl;
 import com.tcoded.nochatreports.nms.v1_20_6.listener.ClientboundPlayerChatListener;
@@ -29,19 +30,18 @@ import java.util.Properties;
 @SuppressWarnings("unused")
 public class NmsProviderImpl extends NmsProvider<ServerPlayer> {
 
-    private final boolean isPaper;
     private final GlobalPacketHandler globalPacketHandler;
     private final ChannelInjector channelInjector;
 
-    public NmsProviderImpl(boolean isPaper) {
-        this.isPaper = isPaper;
+    public NmsProviderImpl(NmsProviderConfig nmsConfig) {
+        super(nmsConfig);
 
         DedicatedServer server = (DedicatedServer) MinecraftServer.getServer();
         server.settings.update((config) -> {
             final Properties newProps = new Properties(config.properties);
             newProps.setProperty("enforce-secure-profile", String.valueOf(false));
 
-            if (isPaper) {
+            if (this.getConfig().isPaper()) {
                 return config.reload(server.registryAccess(), newProps, server.options);
             } else {
                 try {
@@ -79,7 +79,7 @@ public class NmsProviderImpl extends NmsProvider<ServerPlayer> {
     @Override
     public ServerPlayer getNmsPlayer(Player player) {
         CraftPlayer craftPlayer = (CraftPlayer) player;
-        if (isPaper) return (ServerPlayer) craftPlayer.getHandleRaw();
+        if (this.getConfig().isPaper()) return (ServerPlayer) craftPlayer.getHandleRaw();
         else return craftPlayer.getHandle();
     }
 

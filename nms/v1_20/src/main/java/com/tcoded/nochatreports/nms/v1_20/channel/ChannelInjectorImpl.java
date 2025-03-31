@@ -120,13 +120,16 @@ public class ChannelInjectorImpl extends AbstractChannelInjector {
     private void setPacketHandler(Connection connection, boolean replace) {
         // This is definitely null sometimes
         // noinspection ConstantValue
-        if (connection.channel == null) return;
+        if (connection.channel == null) {
+            if (nms.isDebug()) logger.info("setPacketHandler: connection.channel is null");
+            return;
+        }
         setPacketHandler(connection.channel, replace);
     }
 
     private void setPacketHandler(Channel channel, boolean replace) {
         if (channel == null) {
-            logger.warning("setPacketHandler failed: channel is null");
+            if (nms.isDebug()) logger.warning("setPacketHandler failed: channel is null");
             return;
         }
         channel.eventLoop().submit(() -> {
@@ -161,7 +164,7 @@ public class ChannelInjectorImpl extends AbstractChannelInjector {
 
     private void handleRemoveChannel(Channel channel) {
         if (channel == null) {
-            logger.warning("handleRemoveChannel channel is null");
+            if (nms.getConfig().isPaper()) logger.warning("handleRemoveChannel channel is null");
             return;
         }
 

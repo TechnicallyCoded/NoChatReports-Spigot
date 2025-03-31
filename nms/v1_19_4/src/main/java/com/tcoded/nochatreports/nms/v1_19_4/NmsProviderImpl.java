@@ -3,6 +3,7 @@ package com.tcoded.nochatreports.nms.v1_19_4;
 import com.tcoded.nochatreports.nms.NmsProvider;
 import com.tcoded.nochatreports.nms.channel.ChannelInjector;
 import com.tcoded.nochatreports.nms.channel.GlobalPacketHandler;
+import com.tcoded.nochatreports.nms.types.NmsProviderConfig;
 import com.tcoded.nochatreports.nms.v1_19_4.channel.ChannelInjectorImpl;
 import com.tcoded.nochatreports.nms.v1_19_4.channel.GlobalPacketHandlerImpl;
 import com.tcoded.nochatreports.nms.v1_19_4.listener.ClientboundPlayerChatListener;
@@ -30,12 +31,11 @@ import java.util.Properties;
 @SuppressWarnings("unused")
 public class NmsProviderImpl extends NmsProvider<ServerPlayer> {
 
-    private final boolean isPaper;
     private final GlobalPacketHandler globalPacketHandler;
     private final ChannelInjector channelInjector;
 
-    public NmsProviderImpl(boolean isPaper) {
-        this.isPaper = isPaper;
+    public NmsProviderImpl(NmsProviderConfig nmsConfig) {
+        super(nmsConfig);
 
         DedicatedServer server = (DedicatedServer) MinecraftServer.getServer();
         server.settings.update((config) -> {

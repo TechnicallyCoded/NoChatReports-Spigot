@@ -3,6 +3,8 @@ package com.tcoded.nochatreports.plugin;
 import com.tcoded.folialib.FoliaLib;
 import com.tcoded.lightlibs.updatechecker.SimpleUpdateChecker;
 import com.tcoded.nochatreports.nms.NmsProvider;
+import com.tcoded.nochatreports.nms.types.NmsProviderConfig;
+import com.tcoded.nochatreports.plugin.hook.ViaHook;
 import com.tcoded.nochatreports.plugin.listener.PacketListener;
 import com.tcoded.nochatreports.plugin.listener.JoinListener;
 import com.tcoded.nochatreports.plugin.listener.KickListener;
@@ -30,6 +32,8 @@ public final class NoChatReports extends JavaPlugin {
     private NmsProvider<?> nmsProvider;
     private FoliaLib foliaLib;
     public boolean disWarn;
+
+    private boolean debug;
 
     public NoChatReports() {
         this.pls = new ArrayList<>();
@@ -110,8 +114,15 @@ public final class NoChatReports extends JavaPlugin {
         String bukkitVersion = this.getServer().getBukkitVersion();
         String mcVersion = bukkitVersion.substring(0, bukkitVersion.indexOf("-"));
 
+        // Config
+        this.debug = this.getConfig().getBoolean("debug-mode", false);
+
+        // NMS
         getLogger().info("Loading support for Minecraft version: " + mcVersion);
-        this.nmsProvider = NmsProvider.getNmsProvider(mcVersion, this.foliaLib.isFolia() || this.foliaLib.isPaper());
+        this.nmsProvider = NmsProvider.getNmsProvider(mcVersion, new NmsProviderConfig(
+                this.foliaLib.isFolia() || this.foliaLib.isPaper(),
+                this::isDebug
+        ));
 
         if (this.nmsProvider == null) {
             getLogger().severe("Failed to load NMS provider for Minecraft version: " + mcVersion);
@@ -119,11 +130,6 @@ public final class NoChatReports extends JavaPlugin {
             return;
         }
 
-//        PacketEventsAPI<?> api = PacketEvents.getAPI();
-//        api.getSettings().debug(false).bStats(false).checkForUpdates(false).timeStampMode(TimeStampMode.MILLIS).reEncodeByDefault(true);
-//        api.init();
-
-//        api.getEventManager().registerListener(new ChatPacketListener(this), PacketListenerPriority.NORMAL);
         // Packet Listeners
         NmsProvider<?> nms = this.getNmsProvider();
         nms.getChannelInjector().injectAll(this.getServer().getOnlinePlayers());
@@ -141,6 +147,10 @@ public final class NoChatReports extends JavaPlugin {
         // Update checker
         Consumer<Runnable> asyncConsumer = runnable -> this.foliaLib.getScheduler().runAsync(wt -> runnable.run());
         SimpleUpdateChecker.checkUpdate(this, "[NoChatReports] ", SPIGOT_RESOURCE_ID, asyncConsumer);
+    }
+
+    public boolean isDebug() {
+        return this.debug;
     }
 
     @Override
