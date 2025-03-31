@@ -147,6 +147,9 @@ public final class NoChatReports extends JavaPlugin {
         // Update checker
         Consumer<Runnable> asyncConsumer = runnable -> this.foliaLib.getScheduler().runAsync(wt -> runnable.run());
         SimpleUpdateChecker.checkUpdate(this, "[NoChatReports] ", SPIGOT_RESOURCE_ID, asyncConsumer);
+
+        // Handle unsupported client popups
+        ViaHook.hookIfPresent(this);
     }
 
     public boolean isDebug() {
