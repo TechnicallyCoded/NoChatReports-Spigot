@@ -2,6 +2,7 @@ package com.tcoded.nochatreports.nms;
 
 public enum NmsVersion {
 
+    v1_21_8 ("1_21_8"),
     v1_21_7 ("1_21_7"),
     v1_21_6 ("1_21_6"),
     v1_21_5 ("1_21_5"),
