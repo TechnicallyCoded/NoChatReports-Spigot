@@ -1,0 +1,42 @@
+package com.tcoded.nochatreports.nms.v1_19_4.listener;
+
+import com.tcoded.nochatreports.nms.NmsProvider;
+import com.tcoded.nochatreports.nms.event.SecureChatNotificationPacketEvent;
+import com.tcoded.nochatreports.nms.listener.PacketListener;
+import com.tcoded.nochatreports.nms.types.PacketWriteResult;
+import net.minecraft.network.protocol.game.ClientboundServerDataPacket;
+import org.bukkit.entity.Player;
+
+public class ClientboundServerDataPacketListener implements PacketListener<ClientboundServerDataPacket> {
+
+    private final NmsProvider<?> nms;
+
+    public ClientboundServerDataPacketListener(NmsProvider<?> plugin) {
+        this.nms = plugin;
+    }
+
+    @Override
+    public PacketWriteResult<ClientboundServerDataPacket> onPacketSend(Player player, ClientboundServerDataPacket packet) {
+        SecureChatNotificationPacketEvent event = new SecureChatNotificationPacketEvent(packet.enforcesSecureChat());
+        event.callEvent();
+
+        boolean rebuild = false;
+        if (event.isEnforcesSecureChat() != packet.enforcesSecureChat()) rebuild = true;
+
+        if (rebuild) {
+            packet = new ClientboundServerDataPacket(
+                    packet.getMotd(),
+                    packet.getIconBytes(),
+                    event.isEnforcesSecureChat()
+            );
+        }
+
+        return new PacketWriteResult<>(!event.isCancelled(), packet);
+    }
+
+    @Override
+    public Class<ClientboundServerDataPacket> getPacketClass() {
+        return ClientboundServerDataPacket.class;
+    }
+
+}

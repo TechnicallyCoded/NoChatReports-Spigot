@@ -15,7 +15,7 @@ public class KickListener implements Listener {
     private final String[] invalidReasons;
 
     public KickListener(String preventedKickMessage, List<String> invalidReasons) {
-        this.preventedKickMessage = preventedKickMessage;
+        this.preventedKickMessage = ChatColor.translateAlternateColorCodes('&', preventedKickMessage);
         this.invalidReasons = invalidReasons.toArray(String[]::new);
     }
 

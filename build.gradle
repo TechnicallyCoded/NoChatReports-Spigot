@@ -5,7 +5,7 @@ plugins {
 
 allprojects {
     group = 'com.tcoded'
-    version = '2.2.2'
+    version = '2.7.0'
 
     repositories {
         mavenCentral()
@@ -31,6 +31,10 @@ allprojects {
 
         maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
 
+        maven {
+            name = "problems"
+            url = "https://repo.viaversion.com"
+        }
     }
 }
 
@@ -82,8 +86,12 @@ dependencies {
     implementation project(path: ":nms:v1_21_1", configuration: "reobf")
     implementation project(path: ":nms:v1_21_3", configuration: "reobf")
     implementation project(path: ":nms:v1_21_4", configuration: "reobf")
+    implementation project(path: ":nms:v1_21_5", configuration: "reobf")
+    implementation project(path: ":nms:v1_21_6", configuration: "reobf")
+    implementation project(path: ":nms:v1_21_7", configuration: "reobf")
+    implementation project(path: ":nms:v1_21_8", configuration: "reobf")
 
-    implementation "com.github.retrooper:packetevents-spigot:2.7.0-SNAPSHOT"
+//    implementation "com.github.retrooper:packetevents-spigot:2.7.0-SNAPSHOT"
 }
 
 java {
