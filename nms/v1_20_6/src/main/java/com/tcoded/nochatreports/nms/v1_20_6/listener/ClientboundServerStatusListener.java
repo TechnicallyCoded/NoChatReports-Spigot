@@ -20,7 +20,7 @@ public class ClientboundServerStatusListener implements PacketListener<Clientbou
     public PacketWriteResult<ClientboundStatusResponsePacket> onPacketSend(Player player, ClientboundStatusResponsePacket packet) {
         ServerStatus prevStatus = packet.status();
         SecureChatNotificationPacketEvent event = new SecureChatNotificationPacketEvent(prevStatus.enforcesSecureChat());
-        event.callEvent();
+        Bukkit.getPluginManager().callEvent(event);
 
         boolean rebuild = false;
         if (event.isEnforcesSecureChat() != prevStatus.enforcesSecureChat()) rebuild = true;

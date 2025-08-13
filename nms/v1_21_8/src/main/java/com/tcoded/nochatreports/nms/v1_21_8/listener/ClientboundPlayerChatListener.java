@@ -18,7 +18,7 @@ public class ClientboundPlayerChatListener implements PacketListener<Clientbound
     @Override
     public PacketWriteResult<ClientboundPlayerChatPacket> onPacketSend(Player player, ClientboundPlayerChatPacket packet) {
         PlayerChatPacketEvent event = new PlayerChatPacketEvent(player, this.nms.wrapChatPacket(packet));
-        event.callEvent();
+        Bukkit.getPluginManager().callEvent(event);
 
         return new PacketWriteResult<>(!event.isCancelled(), packet);
     }

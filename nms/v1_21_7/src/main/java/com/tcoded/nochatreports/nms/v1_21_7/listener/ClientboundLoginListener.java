@@ -19,7 +19,7 @@ public class ClientboundLoginListener implements PacketListener<ClientboundLogin
     public PacketWriteResult<ClientboundLoginPacket> onPacketSend(Player player, ClientboundLoginPacket packet) {
 
         SecureChatNotificationPacketEvent event = new SecureChatNotificationPacketEvent(packet.enforcesSecureChat());
-        event.callEvent();
+        Bukkit.getPluginManager().callEvent(event);
 
         boolean rebuild = false;
         if (event.isEnforcesSecureChat() != packet.enforcesSecureChat()) rebuild = true;

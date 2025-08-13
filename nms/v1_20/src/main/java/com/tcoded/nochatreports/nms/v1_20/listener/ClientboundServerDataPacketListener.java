@@ -18,7 +18,7 @@ public class ClientboundServerDataPacketListener implements PacketListener<Clien
     @Override
     public PacketWriteResult<ClientboundServerDataPacket> onPacketSend(Player player, ClientboundServerDataPacket packet) {
         SecureChatNotificationPacketEvent event = new SecureChatNotificationPacketEvent(packet.enforcesSecureChat());
-        event.callEvent();
+        Bukkit.getPluginManager().callEvent(event);
 
         boolean rebuild = false;
         if (event.isEnforcesSecureChat() != packet.enforcesSecureChat()) rebuild = true;

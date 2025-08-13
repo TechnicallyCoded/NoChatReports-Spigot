@@ -18,7 +18,7 @@ public class ServerboundChatSessionUpdateListener implements PacketListener<Serv
     @Override
     public PacketWriteResult<ServerboundChatSessionUpdatePacket> onPacketSend(Player player, ServerboundChatSessionUpdatePacket packet) {
         ChatSessionUpdateEvent event = new ChatSessionUpdateEvent();
-        event.callEvent();
+        Bukkit.getPluginManager().callEvent(event);
 
         return new PacketWriteResult<>(!event.isCancelled(), packet);
     }
