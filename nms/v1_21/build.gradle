@@ -15,3 +15,9 @@ java {
 tasks.named('assemble') {
     dependsOn 'reobfJar'
 }
+
+configurations.configureEach {
+    resolutionStrategy.dependencySubstitution {
+        substitute module('me.lucko:spark-paper:1.10.84-20240720.204128-1') using module('me.lucko:spark-paper:1.10.133-20250413.112336-1') because 'snapshot version missing from repositories'
+    }
+}

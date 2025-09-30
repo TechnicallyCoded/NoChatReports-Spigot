@@ -5,6 +5,7 @@ import com.tcoded.nochatreports.nms.event.ChatSessionUpdateEvent;
 import com.tcoded.nochatreports.nms.listener.PacketListener;
 import com.tcoded.nochatreports.nms.types.PacketWriteResult;
 import net.minecraft.network.protocol.game.ServerboundChatSessionUpdatePacket;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class ServerboundChatSessionUpdateListener implements PacketListener<ServerboundChatSessionUpdatePacket> {
