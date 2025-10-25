@@ -13,5 +13,5 @@ java {
 }
 
 tasks.named('assemble') {
-    dependsOn 'shadowJar'
+    dependsOn 'reobfJar'
 }
