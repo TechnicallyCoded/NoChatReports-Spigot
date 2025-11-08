@@ -6,6 +6,7 @@ import com.tcoded.nochatreports.nms.channel.GlobalPacketHandler;
 import com.tcoded.nochatreports.nms.types.MIMList;
 import com.tcoded.nochatreports.nms.types.MIMQueue;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelPipeline;
 import net.minecraft.network.Connection;
 import net.minecraft.server.MinecraftServer;
@@ -52,9 +53,12 @@ public class ChannelInjectorImpl extends AbstractChannelInjector {
         for (Field field : serverConnectionClass.getDeclaredFields()) {
             try {
                 if (field.getType().isAssignableFrom(List.class)) {
-                    if (!isIdentityEq(field, srvConnHandler, connList)) this.applyMimList(field, srvConnHandler, this::handleNewChannel, this::handleRemoveChannel); // 1st list
-                    else this.applyMimList(field, srvConnHandler, this::handleNewConnection, this::handleRemoveConnection); // 2nd list
-                    unlockPaperQueue = true; // Paper's "pending" Queue should come right after
+                    // Handle first: List<ChannelFuture> channels
+                    if (!isIdentityEq(field, srvConnHandler, connList)) this.applyMimList(field, srvConnHandler, this::handleNewChannelFuture, this::handleRemoveChannelFuture);
+                    // Handle second: List<Connection> connections
+                    else this.applyMimList(field, srvConnHandler, this::handleNewConnection, this::handleRemoveConnection);
+                    // Paper's "pending" Queue should come right after
+                    unlockPaperQueue = true;
                 }
                 if (unlockPaperQueue && field.getType().isAssignableFrom(Queue.class)) {
                     this.applyMimQueue(field, srvConnHandler); // 3rd "list" (actually a queue)
@@ -101,6 +105,11 @@ public class ChannelInjectorImpl extends AbstractChannelInjector {
     private Connection handleNewConnection(Connection connection) {
         handleNewChannel(connection.channel);
         return connection;
+    }
+
+    private ChannelFuture handleNewChannelFuture(ChannelFuture future) {
+        this.handleNewChannel(future.channel());
+        return future;
     }
 
     private Channel handleNewChannel(Channel channel) {
@@ -160,6 +169,10 @@ public class ChannelInjectorImpl extends AbstractChannelInjector {
         // noinspection ConstantValue
         if (connection.channel == null) return;
         this.handleRemoveChannel(connection.channel);
+    }
+
+    private void handleRemoveChannelFuture(ChannelFuture future) {
+        this.handleRemoveChannel(future.channel());
     }
 
     private void handleRemoveChannel(Channel channel) {
