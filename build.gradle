@@ -5,7 +5,7 @@ plugins {
 
 allprojects {
     group = 'com.tcoded'
-    version = '2.7.6'
+    version = '2.7.7'
 
     repositories {
         mavenCentral()
@@ -80,23 +80,19 @@ dependencies {
     implementation project(path: ":nms:v1_20_4", configuration: "reobf")
     implementation project(path: ":nms:v1_20_6", configuration: "reobf")
     implementation project(path: ":nms:v1_21", configuration: "reobf")
-    implementation project(path: ":nms:v1_21_1", configuration: "reobf")
-    implementation project(path: ":nms:v1_21_3", configuration: "reobf")
     implementation project(path: ":nms:v1_21_4", configuration: "reobf")
     implementation project(path: ":nms:v1_21_5", configuration: "reobf")
-    implementation project(path: ":nms:v1_21_6", configuration: "reobf")
-    implementation project(path: ":nms:v1_21_7", configuration: "reobf")
     implementation project(path: ":nms:v1_21_8", configuration: "reobf")
-    implementation project(path: ":nms:v1_21_9", configuration: "reobf")
-    implementation project(path: ":nms:v1_21_11", configuration: "shadow")
+    implementation project(path: ":nms:v1_21_10", configuration: "reobf")
+    implementation project(path: ":nms:v1_21_11", configuration: "reobf")
     implementation project(path: ":nms:v26_1_2", configuration: "shadow")
 
 //    implementation "com.github.retrooper:packetevents-spigot:2.7.0-SNAPSHOT"
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
 }
 
 jar {
