@@ -112,7 +112,12 @@ public final class NoChatReports extends JavaPlugin {
         // Utils
         this.foliaLib = new FoliaLib(this);
         String bukkitVersion = this.getServer().getBukkitVersion();
-        String mcVersion = bukkitVersion.substring(0, bukkitVersion.indexOf("-"));
+
+        int endIndexBukkit = bukkitVersion.indexOf("-");
+        int endIndexPaper = bukkitVersion.indexOf(".build.");
+        int endIndex = Math.min(endIndexBukkit, endIndexPaper);
+
+        String mcVersion = bukkitVersion.substring(0, endIndex);
 
         // Config
         this.debug = this.getConfig().getBoolean("debug-mode", false);

@@ -5,7 +5,7 @@ plugins {
 
 allprojects {
     group = 'com.tcoded'
-    version = '2.7.7'
+    version = '2.7.8'
 
     repositories {
         mavenCentral()
@@ -86,6 +86,7 @@ dependencies {
     implementation project(path: ":nms:v1_21_10", configuration: "reobf")
     implementation project(path: ":nms:v1_21_11", configuration: "reobf")
     implementation project(path: ":nms:v26_1_2", configuration: "shadow")
+    implementation project(path: ":nms:v26_2", configuration: "shadow")
 
 //    implementation "com.github.retrooper:packetevents-spigot:2.7.0-SNAPSHOT"
 }
