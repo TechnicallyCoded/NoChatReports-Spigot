@@ -115,9 +115,16 @@ public final class NoChatReports extends JavaPlugin {
 
         int endIndexBukkit = bukkitVersion.indexOf("-");
         int endIndexPaper = bukkitVersion.indexOf(".build.");
-        int endIndex = Math.min(endIndexBukkit, endIndexPaper);
+        int endIndex = -1;
+        if (endIndexBukkit != -1 && endIndexPaper != -1) {
+            endIndex = Math.min(endIndexBukkit, endIndexPaper);
+        } else if (endIndexBukkit != -1) {
+            endIndex = endIndexBukkit;
+        } else if (endIndexPaper != -1) {
+            endIndex = endIndexPaper;
+        }
 
-        String mcVersion = bukkitVersion.substring(0, endIndex);
+        String mcVersion = endIndex == -1 ? bukkitVersion : bukkitVersion.substring(0, endIndex);
 
         // Config
         this.debug = this.getConfig().getBoolean("debug-mode", false);
@@ -164,7 +171,9 @@ public final class NoChatReports extends JavaPlugin {
     @Override
     public void onDisable() {
 //        PacketEvents.getAPI().terminate();
-        this.nmsProvider.getChannelInjector().uninjectAll(this.getServer().getOnlinePlayers());
+        if (this.nmsProvider != null) {
+            this.nmsProvider.getChannelInjector().uninjectAll(this.getServer().getOnlinePlayers());
+        }
         HandlerList.unregisterAll(this);
     }
 
