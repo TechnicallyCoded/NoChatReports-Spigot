@@ -14,7 +14,11 @@ public abstract class NmsProvider<T> {
 
     public static NmsProvider getNmsProvider(String minecraftVersion, NmsProviderConfig config) {
         try {
-            String versionName = NmsVersion.getNmsVersion(minecraftVersion).name();
+            NmsVersion nmsVersion = NmsVersion.getNmsVersion(minecraftVersion);
+            if (nmsVersion == null) {
+                return null;
+            }
+            String versionName = nmsVersion.name();
             Class<?> providerName = Class.forName(
                     NmsProvider.class.getPackageName() + "." + versionName + ".NmsProviderImpl"
             );
