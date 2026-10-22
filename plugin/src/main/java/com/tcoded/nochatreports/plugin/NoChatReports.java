@@ -3,6 +3,7 @@ package com.tcoded.nochatreports.plugin;
 import com.tcoded.folialib.FoliaLib;
 import com.tcoded.lightlibs.updatechecker.SimpleUpdateChecker;
 import com.tcoded.nochatreports.nms.NmsProvider;
+import com.tcoded.nochatreports.nms.NmsVersion;
 import com.tcoded.nochatreports.nms.types.NmsProviderConfig;
 import com.tcoded.nochatreports.plugin.hook.ViaHook;
 import com.tcoded.nochatreports.plugin.listener.PacketListener;
@@ -113,11 +114,7 @@ public final class NoChatReports extends JavaPlugin {
         this.foliaLib = new FoliaLib(this);
         String bukkitVersion = this.getServer().getBukkitVersion();
 
-        int endIndexBukkit = bukkitVersion.indexOf("-");
-        int endIndexPaper = bukkitVersion.indexOf(".build.");
-        int endIndex = Math.min(endIndexBukkit, endIndexPaper);
-
-        String mcVersion = bukkitVersion.substring(0, endIndex);
+        String mcVersion = NmsVersion.getMinecraftVersion(bukkitVersion);
 
         // Config
         this.debug = this.getConfig().getBoolean("debug-mode", false);
@@ -164,7 +161,9 @@ public final class NoChatReports extends JavaPlugin {
     @Override
     public void onDisable() {
 //        PacketEvents.getAPI().terminate();
-        this.nmsProvider.getChannelInjector().uninjectAll(this.getServer().getOnlinePlayers());
+        if (this.nmsProvider != null) {
+            this.nmsProvider.getChannelInjector().uninjectAll(this.getServer().getOnlinePlayers());
+        }
         HandlerList.unregisterAll(this);
     }
 
