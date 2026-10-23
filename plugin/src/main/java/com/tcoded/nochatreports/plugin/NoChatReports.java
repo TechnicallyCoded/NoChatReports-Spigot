@@ -10,6 +10,7 @@ import com.tcoded.nochatreports.plugin.listener.PacketListener;
 import com.tcoded.nochatreports.plugin.listener.JoinListener;
 import com.tcoded.nochatreports.plugin.listener.KickListener;
 import com.tcoded.nochatreports.plugin.util.PluginUtil;
+import com.tcoded.nochatreports.plugin.util.ServerVersion;
 import com.tcoded.nochatreports.plugin.util.SimpleLogFilter;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -112,9 +113,7 @@ public final class NoChatReports extends JavaPlugin {
     public void onEnable() {
         // Utils
         this.foliaLib = new FoliaLib(this);
-        String bukkitVersion = this.getServer().getBukkitVersion();
-
-        String mcVersion = NmsVersion.getMinecraftVersion(bukkitVersion);
+        String mcVersion = NmsVersion.getMinecraftVersion(ServerVersion.getMinecraftVersion());
 
         // Config
         this.debug = this.getConfig().getBoolean("debug-mode", false);
