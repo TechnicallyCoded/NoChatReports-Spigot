@@ -116,3 +116,5 @@ PluginPoliceFilter.java
 .gradle/
 build/
 *.ignore
+# Keep the official Gradle wrapper executable in source control.
+!gradle/wrapper/gradle-wrapper.jar

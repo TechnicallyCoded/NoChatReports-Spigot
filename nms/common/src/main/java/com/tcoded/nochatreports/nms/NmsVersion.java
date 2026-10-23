@@ -2,6 +2,7 @@ package com.tcoded.nochatreports.nms;
 
 public enum NmsVersion {
 
+    v26_3 ("26_3"),
     v26_2 ("26_2"),
     v26_1_2 ("26_1(_[12])?(_build_\\d+)?"),
     v1_21_11 ("1_21_11"),
@@ -29,7 +30,8 @@ public enum NmsVersion {
     public static NmsVersion getNmsVersion(String version) {
         NmsVersion[] values = NmsVersion.values();
 
-        String replacedVersion = version.replace(".", "_");
+        if (version == null) return null;
+        String replacedVersion = getMinecraftVersion(version).replace(".", "_");
         for (NmsVersion nmsVersion : values) {
             for (String matchVersion : nmsVersion.getVersions()) {
                 if (replacedVersion.matches(matchVersion)) {
@@ -39,6 +41,11 @@ public enum NmsVersion {
         }
 
         return null;
+    }
+
+    /** Extract the numeric Minecraft version from Bukkit release, build and local versions. */
+    public static String getMinecraftVersion(String bukkitVersion) {
+        return bukkitVersion.replaceFirst("^(\\d+\\.\\d+(?:\\.\\d+)?)(?:[.-].*)?$", "$1");
     }
 
     public static NmsVersion getMostRecentVersion() {

@@ -3,3 +3,9 @@ dependencies {
     compileOnly 'io.netty:netty-all:4.1.116.Final'
     compileOnly "org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT"
 }
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.11.4')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
